@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #F7F5F0;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            color: #fff;
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .qa-logo span { color: #F97316; }
+        .qa-search {
+            flex: 1;
+            max-width: 420px;
+            position: relative;
+        }
+        .qa-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 15px;
+            pointer-events: none;
+        }
+        .qa-search input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px 16px 10px 40px;
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(249,115,22,0.5);
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+        }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 99px;
+            transition: all 0.2s;
+        }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        /* HERO CATEGORÍA */
+        .qa-cat-hero {
+            background: #0D0D0D;
+            padding: 48px 48px 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* IMAGEN CON DEGRADADO */
+        .qa-cat-hero::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 55%;
+            background: url('https://i.blogs.es/7547c2/one-piece/840_560.jpeg') center/cover no-repeat;
+            opacity: 0.5;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.7) 50%, black 100%);
+            mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.7) 50%, black 100%);
+        }
+
+        .qa-cat-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #666;
+            font-size: 13px;
+            text-decoration: none;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-back:hover { color: #fff; }
+        .qa-cat-tag {
+            display: inline-block;
+            background: rgba(249,115,22,0.15);
+            color: #F97316;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 99px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(249,115,22,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-hero p {
+            color: #888;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 28px;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-stat-item { display: flex; flex-direction: column; gap: 2px; }
+        .qa-stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .qa-stat-label { font-size: 12px; color: #666; }
+
+        /* QUIZ LIST */
+        .qa-quiz-list {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 48px 48px 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .qa-quiz-btn {
+            width: 100%;
+            background: #fff;
+            border: 1.5px solid #EDEAE4;
+            border-radius: 18px;
+            padding: 24px 32px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            cursor: pointer;
+            transition: all 0.22s;
+            text-align: left;
+        }
+        .qa-quiz-btn:hover {
+            border-color: #F97316;
+            transform: translateX(6px);
+            box-shadow: -4px 0 0 0 #F97316;
+        }
+        .qa-qb-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: #FFF0E6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            flex-shrink: 0;
+            transition: transform 0.22s;
+        }
+        .qa-quiz-btn:hover .qa-qb-icon { transform: scale(1.1); }
+        .qa-qb-info { flex: 1; }
+        .qa-qb-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: #0D0D0D;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+        .qa-qb-desc { font-size: 14px; color: #888; line-height: 1.5; }
+        .qa-qb-meta { display: flex; gap: 12px; margin-top: 10px; }
+        .qa-qb-pill {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 99px;
+            background: #F7F5F0;
+            color: #888;
+        }
+        .qa-qb-pill.hot { background: #FFF0E6; color: #C2410C; }
+        .qa-qb-arrow {
+            font-size: 22px;
+            color: #ddd;
+            flex-shrink: 0;
+            transition: all 0.22s;
+        }
+        .qa-quiz-btn:hover .qa-qb-arrow { color: #F97316; transform: translateX(4px); }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="qa-header">
+        <div class="qa-logo" onclick="window.location.href='../index.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." id="searchInput" autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="../index.html">Inicio</a>
+            <a href="#" class="active">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <!-- HERO CATEGORÍA -->
+    <div class="qa-cat-hero">
+        <a href="../index.html" class="qa-cat-back">← Volver a categorías</a>
+        <div class="qa-cat-tag">🎌 Anime</div>
+        <h1>Quizzes de Anime</h1>
+        <p>Descubre qué personaje, mundo o historia te define.</p>
+        <div class="qa-cat-stats">
+            <div class="qa-stat-item">
+                <span class="qa-stat-num">4</span>
+                <span class="qa-stat-label">Quizzes</span>
+            </div>
+            <div class="qa-stat-item">
+                <span class="qa-stat-num">47</span>
+                <span class="qa-stat-label">Preguntas en total</span>
+            </div>
+            <div class="qa-stat-item">
+                <span class="qa-stat-num">~3 min</span>
+                <span class="qa-stat-label">Por quiz</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- LISTA DE QUIZZES -->
+    <div class="qa-quiz-list">
+
+        <button class="qa-quiz-btn" onclick="window.location.href='quiz-onepiece.html'">
+            <div class="qa-qb-icon">⚔️</div>
+            <div class="qa-qb-info">
+                <div class="qa-qb-title">¿Qué personaje de One Piece eres?</div>
+                <div class="qa-qb-desc">Luffy, Zoro, Nami... descubre a qué tripulante del Sombrero de Paja te pareces más.</div>
+                <div class="qa-qb-meta">
+                    <span class="qa-qb-pill">12 preguntas</span>
+                    <span class="qa-qb-pill hot">🔥 Popular</span>
+                </div>
+            </div>
+            <span class="qa-qb-arrow">→</span>
+        </button>
+
+        <button class="qa-quiz-btn" onclick="window.location.href='quiz-mha.html'">
+            <div class="qa-qb-icon">🌊</div>
+            <div class="qa-qb-info">
+                <div class="qa-qb-title">¿Qué Estudiante de U.A. serías?</div>
+                <div class="qa-qb-desc">¿Tienes el corazón de Deku o la determinación de Bakugo? Averígualo.</div>
+                <div class="qa-qb-meta">
+                    <span class="qa-qb-pill">10 preguntas</span>
+                </div>
+            </div>
+            <span class="qa-qb-arrow">→</span>
+        </button>
+
+        <button class="qa-quiz-btn" onclick="window.location.href='quiz-kimetsu.html'">
+            <div class="qa-qb-icon">🌙</div>
+            <div class="qa-qb-info">
+                <div class="qa-qb-title">¿Qué Hashira de Kimetsu no Yaiba eres?</div>
+                <div class="qa-qb-desc">Agua, fuego, viento... cada Hashira tiene su esencia. ¿Cuál es la tuya?</div>
+                <div class="qa-qb-meta">
+                    <span class="qa-qb-pill">8 preguntas</span>
+                    <span class="qa-qb-pill hot">✨ Nuevo</span>
+                </div>
+            </div>
+            <span class="qa-qb-arrow">→</span>
+        </button>
+
+        <button class="qa-quiz-btn" onclick="window.location.href='quiz-naruto.html'">
+            <div class="qa-qb-icon">👁️</div>
+            <div class="qa-qb-info">
+                <div class="qa-qb-title">¿Qué clan de Naruto te pertenece?</div>
+                <div class="qa-qb-desc">Uchiha, Hyuga, Uzumaki... ¿En qué clan encontrarías tu verdadero destino?</div>
+                <div class="qa-qb-meta">
+                    <span class="qa-qb-pill">17 preguntas</span>
+                </div>
+            </div>
+            <span class="qa-qb-arrow">→</span>
+        </button>
+
+    </div>
+
+</body>
+</html>
