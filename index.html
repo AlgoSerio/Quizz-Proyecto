@@ -1,12 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Quiz App</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" async></script>
 </head>
 <body>
+
+<div class="container">
+
+    <h1>🧠 Quiz rápido</h1>
+
+    <div id="quiz-container">
+        <div id="question">Pregunta aquí</div>
+
+        <div id="answers"></div>
+
+        <div id="progress">Pregunta 1/5</div>
+    </div>
+
+    <div id="result-container" class="hidden">
+        <h2 id="result-text"></h2>
+        <button onclick="restartQuiz()">Repetir</button>
+    </div>
+
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
