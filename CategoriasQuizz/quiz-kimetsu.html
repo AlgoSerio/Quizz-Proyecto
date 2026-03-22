@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿Qué personaje eres de My Hero Academia? - QuizApp</title>
+    <title>¿Qué personaje eres de Kimetsu no Yaiba? - QuizApp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -74,7 +74,6 @@
         .exit-modal-leave { flex: 1; background: #E24B4A; color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .exit-modal-leave:hover { background: #C0392B; }
 
-        /* MODAL PERSONAJES */
         .chars-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
         .chars-modal-overlay.visible { display: flex; }
         .chars-modal { background: #0D0D0D; border-radius: 24px; padding: 40px; max-width: 860px; width: 100%; max-height: 90vh; overflow-y: auto; }
@@ -126,7 +125,7 @@
     <div class="quiz-wrap" id="quizWrap">
         <div class="quiz-progress-wrap">
             <div class="quiz-progress-top">
-                <span class="quiz-progress-label">My Hero Academia · ¿Qué personaje eres?</span>
+                <span class="quiz-progress-label">Kimetsu no Yaiba · ¿Qué personaje eres?</span>
                 <span class="quiz-progress-num" id="progressNum">1 / 20</span>
             </div>
             <div class="quiz-progress-bar">
@@ -148,7 +147,7 @@
         <div class="result-card" id="resultCard">
             <div class="result-card-bg-color" id="resultBgColor"></div>
             <div class="result-card-left">
-                <div class="result-card-tag">⚡ My Hero Academia</div>
+                <div class="result-card-tag">🌙 Kimetsu no Yaiba</div>
                 <div class="result-card-eres">Eres...</div>
                 <div class="result-card-name" id="resultName"></div>
                 <div class="result-card-desc" id="resultDesc"></div>
@@ -163,7 +162,6 @@
         </div>
     </div>
 
-    <!-- MODAL SALIR -->
     <div class="exit-modal-overlay" id="exitModal">
         <div class="exit-modal">
             <div class="exit-modal-icon">⚠️</div>
@@ -176,7 +174,6 @@
         </div>
     </div>
 
-    <!-- MODAL PERSONAJES -->
     <div class="chars-modal-overlay" id="charsModal">
         <div class="chars-modal">
             <div class="chars-modal-header">
@@ -184,66 +181,16 @@
                 <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
             </div>
             <div class="chars-grid">
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #1A5276;"></div>
-                    <img class="char-card-img" src="img/deku.webp" alt="Deku">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Izuku Midoriya</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #E74C3C;"></div>
-                    <img class="char-card-img" src="img/bakugo.webp" alt="Bakugo">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Katsuki Bakugo</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #2471A3;"></div>
-                    <img class="char-card-img" src="img/todoroki.webp" alt="Todoroki">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Shoto Todoroki</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #C0392B;"></div>
-                    <img class="char-card-img" src="img/uraraka.webp" alt="Uraraka">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Ochaco Uraraka</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #1ABC9C;"></div>
-                    <img class="char-card-img" src="img/iida.webp" alt="Iida">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Tenya Iida</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #F1C40F;"></div>
-                    <img class="char-card-img" src="img/allmight.webp" alt="All Might">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">All Might</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #2C3E50;"></div>
-                    <img class="char-card-img" src="img/eraserhead.webp" alt="Eraserhead">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Shota Aizawa</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #E67E22;"></div>
-                    <img class="char-card-img" src="img/hawks.webp" alt="Hawks">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Hawks</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #8E44AD;"></div>
-                    <img class="char-card-img" src="img/toga.webp" alt="Toga">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Himiko Toga</div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background: #1A1A2E;"></div>
-                    <img class="char-card-img" src="img/dabi.webp" alt="Dabi">
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Dabi</div>
-                </div>
+                <div class="char-card"><div class="char-card-bg" style="background:#1B6CA8;"></div><img class="char-card-img" src="img/tanjiro.webp" alt="Tanjiro"><div class="char-card-overlay"></div><div class="char-card-name">Tanjiro Kamado</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#E91E8C;"></div><img class="char-card-img" src="img/nezuko.webp" alt="Nezuko"><div class="char-card-overlay"></div><div class="char-card-name">Nezuko Kamado</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#F9A825;"></div><img class="char-card-img" src="img/zenitsu.webp" alt="Zenitsu"><div class="char-card-overlay"></div><div class="char-card-name">Zenitsu Agatsuma</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#5D4037;"></div><img class="char-card-img" src="img/inosuke.webp" alt="Inosuke"><div class="char-card-overlay"></div><div class="char-card-name">Inosuke Hashibira</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#1565C0;"></div><img class="char-card-img" src="img/giyu.webp" alt="Giyu"><div class="char-card-overlay"></div><div class="char-card-name">Giyu Tomioka</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#7B1FA2;"></div><img class="char-card-img" src="img/shinobu.webp" alt="Shinobu"><div class="char-card-overlay"></div><div class="char-card-name">Shinobu Kocho</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#BF360C;"></div><img class="char-card-img" src="img/rengoku.webp" alt="Rengoku"><div class="char-card-overlay"></div><div class="char-card-name">Kyojuro Rengoku</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#F57F17;"></div><img class="char-card-img" src="img/tengen.webp" alt="Tengen"><div class="char-card-overlay"></div><div class="char-card-name">Tengen Uzui</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#212121;"></div><img class="char-card-img" src="img/muzan.webp" alt="Muzan"><div class="char-card-overlay"></div><div class="char-card-name">Muzan Kibutsuji</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#880E4F;"></div><img class="char-card-img" src="img/akaza.webp" alt="Akaza"><div class="char-card-overlay"></div><div class="char-card-name">Akaza</div></div>
             </div>
         </div>
     </div>
@@ -251,202 +198,252 @@
     <script>
         const preguntas = [
             {
-                texto: "¿Cuál es tu mayor motivación para ser héroe?",
+                texto: "¿Cuál es tu mayor motivación para seguir adelante?",
                 opciones: [
-                    { texto: "Demostrar que cualquiera puede ser héroe sin importar su origen.", personaje: "Deku" },
-                    { texto: "Ser el número uno y que nadie me supere jamás.", personaje: "Bakugo" },
-                    { texto: "Proteger a todos con una sonrisa, como siempre soñé.", personaje: "AllMight" },
-                    { texto: "Mantener el orden y la justicia con eficiencia total.", personaje: "Iida" }
+                    { texto: "Proteger a mi familia y vengar a los que perdí.", personaje: "Tanjiro" },
+                    { texto: "Proteger a mi hermano sin importar lo que cueste.", personaje: "Nezuko" },
+                    { texto: "Sobrevivir y encontrar a alguien a quien proteger.", personaje: "Zenitsu" },
+                    { texto: "Demostrar que soy el más fuerte de todos.", personaje: "Inosuke" }
                 ]
             },
             {
-                texto: "¿Cómo reaccionas cuando alguien menosprecia tus capacidades?",
+                texto: "¿Cómo reaccionas ante el sufrimiento de los demás?",
                 opciones: [
-                    { texto: "Me esfuerzo el doble para demostrar que se equivocan.", personaje: "Deku" },
-                    { texto: "Me enfurezco y se lo demuestro ahora mismo.", personaje: "Bakugo" },
-                    { texto: "Lo ignoro y sigo mi camino con total calma.", personaje: "Todoroki" },
-                    { texto: "Me río y uso ese momento como combustible.", personaje: "Hawks" }
+                    { texto: "Me duele profundamente y hago todo lo posible por ayudar.", personaje: "Tanjiro" },
+                    { texto: "Actúo instintivamente para proteger aunque no entienda por qué.", personaje: "Nezuko" },
+                    { texto: "Me afecta mucho y a veces me paraliza el miedo.", personaje: "Zenitsu" },
+                    { texto: "No lo muestro fácilmente pero actúo cuando es necesario.", personaje: "Giyu" }
                 ]
             },
             {
-                texto: "¿Cuál es tu estilo de combate preferido?",
+                texto: "¿Cómo describes tu estilo de combate?",
                 opciones: [
-                    { texto: "Analizo al enemigo y busco su punto débil antes de actuar.", personaje: "Deku" },
-                    { texto: "Ataque directo y explosivo, sin dar tiempo a reaccionar.", personaje: "Bakugo" },
-                    { texto: "Control total del campo con precisión y estrategia.", personaje: "Todoroki" },
-                    { texto: "Apoyo y rescate, me aseguro de que nadie quede atrás.", personaje: "Uraraka" }
-                ]
-            },
-            {
-                texto: "¿Cómo manejas la presión en situaciones límite?",
-                opciones: [
-                    { texto: "Me bloqueo al principio pero siempre encuentro una salida.", personaje: "Deku" },
-                    { texto: "La presión me activa, saco lo mejor de mí en esos momentos.", personaje: "Bakugo" },
-                    { texto: "Me mantengo frío y calculador, las emociones no me controlan.", personaje: "Eraserhead" },
-                    { texto: "Pienso en los demás y eso me da la fuerza para seguir.", personaje: "Uraraka" }
-                ]
-            },
-            {
-                texto: "¿Cómo es tu relación con las reglas?",
-                opciones: [
-                    { texto: "Las respeto pero las rompo cuando la situación lo requiere.", personaje: "Deku" },
-                    { texto: "Las reglas son para los que no pueden ganar sin ellas.", personaje: "Bakugo" },
-                    { texto: "Las sigo al pie de la letra, son la base de la sociedad.", personaje: "Iida" },
-                    { texto: "Las cuestiono cuando son injustas y actúo en consecuencia.", personaje: "Eraserhead" }
-                ]
-            },
-            {
-                texto: "¿Qué harías si un villano amenaza a alguien inocente?",
-                opciones: [
-                    { texto: "Me lanzo sin pensarlo, no puedo quedarme quieto.", personaje: "Deku" },
-                    { texto: "Derroto al villano de la forma más rápida y contundente.", personaje: "Bakugo" },
-                    { texto: "Evalúo la situación y actúo de forma estratégica.", personaje: "Todoroki" },
-                    { texto: "Me aseguro primero de poner a salvo a los civiles.", personaje: "Uraraka" }
+                    { texto: "Técnico y adaptable, aprendo del enemigo mientras combato.", personaje: "Tanjiro" },
+                    { texto: "Explosivo e instintivo, mi cuerpo actúa antes que mi mente.", personaje: "Inosuke" },
+                    { texto: "Preciso y calculado, busco el punto débil antes de actuar.", personaje: "Shinobu" },
+                    { texto: "Imponente y poderoso, aplasto con fuerza bruta y determinación.", personaje: "Rengoku" }
                 ]
             },
             {
                 texto: "¿Cuál es tu mayor debilidad?",
                 opciones: [
-                    { texto: "Me preocupo demasiado por los demás y me olvido de mí mismo.", personaje: "Deku" },
-                    { texto: "Mi orgullo me impide pedir ayuda cuando la necesito.", personaje: "Bakugo" },
-                    { texto: "Las expectativas de mi familia me pesan demasiado.", personaje: "Todoroki" },
-                    { texto: "Soy demasiado rígido con las normas y no tengo flexibilidad.", personaje: "Iida" }
+                    { texto: "Soy demasiado compasivo incluso con los enemigos.", personaje: "Tanjiro" },
+                    { texto: "El miedo me domina aunque luego lo supere.", personaje: "Zenitsu" },
+                    { texto: "Soy demasiado impulsivo y no pienso antes de actuar.", personaje: "Inosuke" },
+                    { texto: "Me cuesta conectar con los demás emocionalmente.", personaje: "Giyu" }
                 ]
             },
             {
-                texto: "¿Cómo ves a las personas que te rodean?",
+                texto: "¿Cómo ves a tus enemigos?",
                 opciones: [
-                    { texto: "Son mis amigos y aprendo algo de cada uno de ellos.", personaje: "Deku" },
-                    { texto: "Son rivales que debo superar para llegar a la cima.", personaje: "Bakugo" },
-                    { texto: "Son personas en quienes confío aunque no lo demuestre.", personaje: "Todoroki" },
-                    { texto: "Son personas que necesitan ser protegidas y guiadas.", personaje: "AllMight" }
+                    { texto: "Con compasión, entiendo que muchos también sufrieron.", personaje: "Tanjiro" },
+                    { texto: "Como amenazas que debo eliminar para proteger a los míos.", personaje: "Nezuko" },
+                    { texto: "Con miedo pero también con determinación de superarlos.", personaje: "Zenitsu" },
+                    { texto: "Como obstáculos que debo vencer para demostrar mi fuerza.", personaje: "Inosuke" }
                 ]
             },
             {
-                texto: "¿Qué sacrificarías por salvar a alguien?",
+                texto: "¿Cómo afrontas el miedo?",
                 opciones: [
-                    { texto: "Mi propio cuerpo si es necesario, sin dudarlo.", personaje: "Deku" },
-                    { texto: "Prefiero ganar sin perder nada, el sacrificio es ineficiente.", personaje: "Bakugo" },
-                    { texto: "Todo. La vida de los demás siempre va primero.", personaje: "AllMight" },
-                    { texto: "Lo necesario pero con una estrategia clara para minimizar pérdidas.", personaje: "Eraserhead" }
+                    { texto: "Lo reconozco pero sigo adelante pensando en los demás.", personaje: "Tanjiro" },
+                    { texto: "Me paraliza al principio pero encuentro fuerzas cuando más las necesito.", personaje: "Zenitsu" },
+                    { texto: "No lo reconozco, me lanzo hacia adelante sin pensarlo.", personaje: "Inosuke" },
+                    { texto: "Lo proceso en silencio y actúo con frialdad.", personaje: "Giyu" }
                 ]
             },
             {
-                texto: "¿Qué opinas sobre los villanos?",
+                texto: "¿Qué valoras más en una persona?",
                 opciones: [
-                    { texto: "Muchos tienen razones comprensibles aunque sus métodos sean erróneos.", personaje: "Deku" },
-                    { texto: "Son obstáculos que debo derrotar, nada más.", personaje: "Bakugo" },
-                    { texto: "Son el resultado de una sociedad que ha fallado a muchas personas.", personaje: "Eraserhead" },
-                    { texto: "A veces entiendo su rabia aunque no pueda apoyar sus métodos.", personaje: "Todoroki" }
-                ]
-            },
-            {
-                texto: "¿Cómo afrontas el fracaso?",
-                opciones: [
-                    { texto: "Me levanto, analizo qué falló y trabajo para mejorar.", personaje: "Deku" },
-                    { texto: "Me enfurece y me hace entrenar más duro que nunca.", personaje: "Bakugo" },
-                    { texto: "Lo proceso en silencio y sigo con más determinación.", personaje: "Todoroki" },
-                    { texto: "Busco apoyo en mis compañeros para superarlo juntos.", personaje: "Uraraka" }
-                ]
-            },
-            {
-                texto: "¿Qué harías en tu tiempo libre?",
-                opciones: [
-                    { texto: "Estudiar a otros héroes y analizar sus técnicas.", personaje: "Deku" },
-                    { texto: "Entrenar sin parar para seguir mejorando.", personaje: "Bakugo" },
-                    { texto: "Pasar tiempo tranquilo a solas, lejos del ruido.", personaje: "Todoroki" },
-                    { texto: "Volar y explorar el mundo desde las alturas.", personaje: "Hawks" }
-                ]
-            },
-            {
-                texto: "¿Cómo describes tu sentido del humor?",
-                opciones: [
-                    { texto: "Inocente y espontáneo, me río de las cosas más simples.", personaje: "Deku" },
-                    { texto: "Seco y sarcástico, pocas veces pero muy efectivo.", personaje: "Bakugo" },
-                    { texto: "Oscuro y retorcido, me divierten cosas que asustan a otros.", personaje: "Toga" },
-                    { texto: "Ligero y desenfadado, me gusta reírme de todo.", personaje: "Hawks" }
-                ]
-            },
-            {
-                texto: "¿Cuál es tu relación con el pasado?",
-                opciones: [
-                    { texto: "Lo uso como combustible para seguir adelante.", personaje: "Deku" },
-                    { texto: "Cargo con él en silencio pero no dejo que me detenga.", personaje: "Todoroki" },
-                    { texto: "Mi pasado es la razón de todo lo que hago hoy.", personaje: "Dabi" },
-                    { texto: "Lo recuerdo pero prefiero vivir el presente.", personaje: "Hawks" }
-                ]
-            },
-            {
-                texto: "¿Cómo reaccionas ante alguien que ha perdido la esperanza?",
-                opciones: [
-                    { texto: "Le digo que yo también estuve ahí y que se puede salir.", personaje: "Deku" },
-                    { texto: "Le digo que se levante, el victimismo no lleva a ningún lado.", personaje: "Bakugo" },
-                    { texto: "Me quedo a su lado en silencio sin necesidad de palabras.", personaje: "Todoroki" },
-                    { texto: "Hago todo lo posible para que vuelva a sonreír.", personaje: "Uraraka" }
-                ]
-            },
-            {
-                texto: "¿Qué tipo de héroe quieres ser recordado?",
-                opciones: [
-                    { texto: "El que demostró que cualquiera puede llegar lejos.", personaje: "Deku" },
-                    { texto: "El más fuerte que jamás haya existido, sin discusión.", personaje: "Bakugo" },
-                    { texto: "El símbolo de paz que mantuvo la esperanza viva.", personaje: "AllMight" },
-                    { texto: "El que actuó en las sombras para que otros brillaran.", personaje: "Hawks" }
-                ]
-            },
-            {
-                texto: "¿Qué sientes cuando alguien depende de ti?",
-                opciones: [
-                    { texto: "Una enorme responsabilidad que me impulsa a dar lo mejor.", personaje: "Deku" },
-                    { texto: "Presión que transformo en energía para no fallar.", personaje: "Bakugo" },
-                    { texto: "Una carga que acepto en silencio y llevo con dignidad.", personaje: "Todoroki" },
-                    { texto: "Una emoción enorme que me llena de energía y determinación.", personaje: "Uraraka" }
+                    { texto: "La bondad y la capacidad de empatizar con los demás.", personaje: "Tanjiro" },
+                    { texto: "La lealtad y el amor incondicional hacia los suyos.", personaje: "Nezuko" },
+                    { texto: "La valentía aunque venga acompañada de miedo.", personaje: "Zenitsu" },
+                    { texto: "La fortaleza y la voluntad de no rendirse jamás.", personaje: "Rengoku" }
                 ]
             },
             {
                 texto: "¿Cuál es tu filosofía de vida?",
                 opciones: [
-                    { texto: "Puedo hacerlo aunque me cueste más que a los demás.", personaje: "Deku" },
-                    { texto: "Seré el número uno sin excepciones ni excusas.", personaje: "Bakugo" },
-                    { texto: "Debo forjar mi propio camino lejos de la sombra ajena.", personaje: "Todoroki" },
-                    { texto: "El mundo está roto y alguien tiene que arreglarlo por dentro.", personaje: "Dabi" }
+                    { texto: "Nunca rendirse y tratar a todos con respeto y dignidad.", personaje: "Tanjiro" },
+                    { texto: "Proteger lo que amas cueste lo que cueste.", personaje: "Nezuko" },
+                    { texto: "Arde con todo lo que tienes y nunca dejes que tu llama se apague.", personaje: "Rengoku" },
+                    { texto: "El poder es todo, sin él no puedes proteger nada.", personaje: "Akaza" }
                 ]
             },
             {
-                texto: "¿Cómo expresas tus sentimientos hacia los demás?",
+                texto: "¿Cómo te comportas en un grupo?",
                 opciones: [
-                    { texto: "Con acciones más que con palabras, estando siempre presente.", personaje: "Deku" },
-                    { texto: "No los expreso mucho, prefiero demostrarlo siendo el mejor.", personaje: "Bakugo" },
-                    { texto: "Con intensidad desbordante que a veces asusta a los demás.", personaje: "Toga" },
-                    { texto: "Con gestos pequeños pero significativos en el momento justo.", personaje: "Iida" }
+                    { texto: "Soy el que une al equipo y cuida de todos.", personaje: "Tanjiro" },
+                    { texto: "Actúo por instinto y a veces me cuesta seguir las normas.", personaje: "Inosuke" },
+                    { texto: "Soy reservado pero leal a quienes me importan.", personaje: "Giyu" },
+                    { texto: "Mantengo una fachada alegre que esconde mis verdaderos sentimientos.", personaje: "Shinobu" }
                 ]
             },
             {
-                texto: "¿Qué harías si descubrieras que el sistema de héroes está corrompido?",
+                texto: "¿Cuál es tu relación con la pérdida?",
                 opciones: [
-                    { texto: "Lucharía desde dentro para cambiarlo con mis propios valores.", personaje: "Deku" },
-                    { texto: "Me convertiría en el número uno para cambiarlo desde la cima.", personaje: "Bakugo" },
-                    { texto: "Actuaría en las sombras para desmantelarlo sin que nadie lo sepa.", personaje: "Hawks" },
-                    { texto: "Lo destruiría todo para construir algo mejor desde cero.", personaje: "Dabi" }
+                    { texto: "Me duele profundamente pero la uso para seguir luchando.", personaje: "Tanjiro" },
+                    { texto: "La llevo en silencio sin mostrar el dolor.", personaje: "Giyu" },
+                    { texto: "Me motiva con una ira y una determinación que no se apagan.", personaje: "Shinobu" },
+                    { texto: "Es el combustible de todo lo que hago y quien soy.", personaje: "Akaza" }
+                ]
+            },
+            {
+                texto: "¿Qué tipo de fortaleza admiras más?",
+                opciones: [
+                    { texto: "La fortaleza del corazón y la compasión.", personaje: "Tanjiro" },
+                    { texto: "La fortaleza que nace de proteger a quien amas.", personaje: "Nezuko" },
+                    { texto: "La fortaleza que supera el miedo cuando más importa.", personaje: "Zenitsu" },
+                    { texto: "La fortaleza física que no conoce límites.", personaje: "Akaza" }
+                ]
+            },
+            {
+                texto: "¿Cómo reaccionas ante una injusticia?",
+                opciones: [
+                    { texto: "Me enfrento a ella directamente sin importar el riesgo.", personaje: "Tanjiro" },
+                    { texto: "Actúo instintivamente para defender al más débil.", personaje: "Inosuke" },
+                    { texto: "La analizo y busco la forma más eficaz de combatirla.", personaje: "Shinobu" },
+                    { texto: "La elimino con toda la fuerza a mi disposición.", personaje: "Rengoku" }
+                ]
+            },
+            {
+                texto: "¿Qué papel juegas cuando alguien necesita ayuda?",
+                opciones: [
+                    { texto: "Me lanzo a ayudar sin pensarlo dos veces.", personaje: "Tanjiro" },
+                    { texto: "Actúo instintivamente aunque no entienda bien la situación.", personaje: "Nezuko" },
+                    { texto: "Quiero ayudar pero a veces el miedo me frena.", personaje: "Zenitsu" },
+                    { texto: "Ayudo en silencio sin pedir reconocimiento.", personaje: "Giyu" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu relación con la muerte?",
+                opciones: [
+                    { texto: "La acepto como parte del camino pero lucho por evitarla.", personaje: "Tanjiro" },
+                    { texto: "Le temo profundamente pero aun así sigo adelante.", personaje: "Zenitsu" },
+                    { texto: "La enfrento sin miedo, es parte de ser un cazador.", personaje: "Rengoku" },
+                    { texto: "La rechazo completamente, el poder es la única forma de trascenderla.", personaje: "Muzan" }
+                ]
+            },
+            {
+                texto: "¿Qué te da fuerzas en el momento más oscuro?",
+                opciones: [
+                    { texto: "El recuerdo de mis seres queridos y mi promesa a ellos.", personaje: "Tanjiro" },
+                    { texto: "El amor incondicional que siento por mi hermano.", personaje: "Nezuko" },
+                    { texto: "La imagen de la persona que quiero proteger.", personaje: "Zenitsu" },
+                    { texto: "La llama interior que nunca debe apagarse.", personaje: "Rengoku" }
+                ]
+            },
+            {
+                texto: "¿Cómo ves la diferencia entre humanos y demonios?",
+                opciones: [
+                    { texto: "No tan grande como parece, todos podemos caer en la oscuridad.", personaje: "Tanjiro" },
+                    { texto: "Los demonios son enemigos que debo eliminar para proteger a los míos.", personaje: "Inosuke" },
+                    { texto: "Una línea que algunos cruzaron por dolor y desesperación.", personaje: "Giyu" },
+                    { texto: "Los humanos son débiles, los demonios simplemente evolucionaron.", personaje: "Muzan" }
+                ]
+            },
+            {
+                texto: "¿Cómo afrontas el entrenamiento y la mejora personal?",
+                opciones: [
+                    { texto: "Con dedicación y constancia, mejoro poco a poco cada día.", personaje: "Tanjiro" },
+                    { texto: "Con intensidad salvaje, me lanzo sin límites.", personaje: "Inosuke" },
+                    { texto: "Con una metodología precisa y estratégica.", personaje: "Shinobu" },
+                    { texto: "Con una llama que nunca se apaga, siempre al máximo.", personaje: "Rengoku" }
+                ]
+            },
+            {
+                texto: "¿Qué harías para proteger a alguien que amas?",
+                opciones: [
+                    { texto: "Cualquier cosa, incluso si eso me destruye a mí.", personaje: "Tanjiro" },
+                    { texto: "Transformarme en algo completamente diferente si es necesario.", personaje: "Nezuko" },
+                    { texto: "Superar todos mis miedos y convertirme en su escudo.", personaje: "Zenitsu" },
+                    { texto: "Volverme inmortal para que nadie pueda arrebatármelo jamás.", personaje: "Muzan" }
+                ]
+            },
+            {
+                texto: "¿Qué opinas sobre el sacrificio?",
+                opciones: [
+                    { texto: "Es parte del camino si es necesario para proteger a otros.", personaje: "Tanjiro" },
+                    { texto: "Lo acepto con honor si muero con la llama encendida.", personaje: "Rengoku" },
+                    { texto: "Es una derrota, siempre hay una forma mejor de ganar.", personaje: "Muzan" },
+                    { texto: "Es la prueba máxima del amor hacia los demás.", personaje: "Nezuko" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor sueño?",
+                opciones: [
+                    { texto: "Convertir a mi hermana en humana y vivir en paz.", personaje: "Tanjiro" },
+                    { texto: "Ser el más fuerte que jamás haya existido.", personaje: "Akaza" },
+                    { texto: "Vengar a los que perdí y que su muerte no haya sido en vano.", personaje: "Shinobu" },
+                    { texto: "Vivir eternamente sin miedo a perder nada ni a nadie.", personaje: "Muzan" }
                 ]
             }
         ];
 
         const resultados = {
-            Deku: { nombre: "Izuku Midoriya", descripcion: "Eres perseverancia, empatía y una determinación que no conoce límites. Naciste sin ventajas pero eso nunca te detuvo. Analizas, aprendes y te superas constantemente. Tu mayor fuerza no es tu quirk sino tu corazón.", imagen: "img/deku.webp", color: "#1A5276" },
-            Bakugo: { nombre: "Katsuki Bakugo", descripcion: "Eres ambición pura, orgullo feroz y una competitividad que te empuja más allá de tus límites. Puedes parecer duro por fuera, pero en el fondo lo que más deseas es demostrar que eres el mejor que jamás haya existido.", imagen: "img/bakugo.webp", color: "#E74C3C" },
-            Todoroki: { nombre: "Shoto Todoroki", descripcion: "Eres dualidad, control y una profundidad que pocos logran ver. Cargas con un pasado pesado pero has decidido forjar tu propio camino. Tu frialdad exterior esconde una enorme capacidad de conexión con los demás.", imagen: "img/todoroki.webp", color: "#2471A3" },
-            Uraraka: { nombre: "Ochaco Uraraka", descripcion: "Eres calidez, determinación y una alegría contagiosa. Tienes metas claras y luchas por ellas con una sonrisa. Tu fuerza viene de querer proteger a los que amas y nada te detiene cuando alguien que te importa está en peligro.", imagen: "img/uraraka.webp", color: "#C0392B" },
-            Iida: { nombre: "Tenya Iida", descripcion: "Eres orden, responsabilidad y una dedicación que inspira a todos. Crees profundamente en las reglas y en el honor. A veces eres demasiado rígido, pero cuando la situación lo requiere demuestras una lealtad y un coraje enormes.", imagen: "img/iida.webp", color: "#1ABC9C" },
-            AllMight: { nombre: "All Might", descripcion: "Eres el símbolo de la esperanza, la fuerza y el sacrificio. Sonríes ante la adversidad porque sabes que los demás necesitan ver que todo irá bien. Tu mayor poder no es físico sino la capacidad de inspirar a otros a ser mejores.", imagen: "img/allmight.webp", color: "#F1C40F" },
-            Eraserhead: { nombre: "Shota Aizawa", descripcion: "Eres pragmatismo, lógica y una dedicación silenciosa que no busca reconocimiento. Ves más allá de las apariencias y actúas siempre con eficiencia. Aunque pareces distante, te preocupas profundamente por quienes están bajo tu cuidado.", imagen: "img/eraserhead.webp", color: "#2C3E50" },
-            Hawks: { nombre: "Hawks", descripcion: "Eres libertad, intuición y una inteligencia que va más allá de lo evidente. Te mueves con facilidad entre la luz y la sombra y haces lo que sea necesario por el bien mayor. Tu aparente ligereza esconde una mente estratégica increíble.", imagen: "img/hawks.webp", color: "#E67E22" },
-            Toga: { nombre: "Himiko Toga", descripcion: "Eres intensidad, pasión desbordante y una forma de ver el mundo completamente única. Sientes las emociones al máximo y no entiendes de medias tintas. Tu lealtad hacia los que quieres no tiene límites aunque el mundo no lo entienda.", imagen: "img/toga.webp", color: "#8E44AD" },
-            Dabi: { nombre: "Dabi", descripcion: "Eres ira contenida, dolor transformado en fuego y una determinación oscura que aterra. Cargas con heridas profundas que el mundo nunca vio y actúas movido por una convicción que va más allá del bien y del mal tal como los demás los definen.", imagen: "img/dabi.webp", color: "#1A1A2E" }
+            Tanjiro: {
+                nombre: "Tanjiro Kamado",
+                descripcion: "Eres bondad, determinación y una compasión que no tiene límites. Luchas con el corazón tanto como con la espada y ves la humanidad incluso en tus enemigos. Tu mayor fuerza es que nunca pierdes tu esencia sin importar cuánto sufras.",
+                imagen: "img/tanjiro.webp",
+                color: "#1B6CA8"
+            },
+            Nezuko: {
+                nombre: "Nezuko Kamado",
+                descripcion: "Eres amor incondicional, instinto protector y una fuerza que nace del corazón. No necesitas palabras para demostrar lo que sientes — tus acciones lo dicen todo. Cuando algo o alguien que amas está en peligro, no existe nada que pueda detenerte.",
+                imagen: "img/nezuko.webp",
+                color: "#E91E8C"
+            },
+            Zenitsu: {
+                nombre: "Zenitsu Agatsuma",
+                descripcion: "Eres sensibilidad, corazón enorme y una valentía que aparece justo cuando más se necesita. El miedo forma parte de ti, pero no te define — en el momento crucial siempre encuentras la fuerza para proteger lo que más quieres.",
+                imagen: "img/zenitsu.webp",
+                color: "#F9A825"
+            },
+            Inosuke: {
+                nombre: "Inosuke Hashibira",
+                descripcion: "Eres instinto puro, fiereza sin límites y una energía salvaje que nadie puede contener. Actúas antes de pensar y eso a veces es tu mayor fortaleza. Debajo de esa fachada dura hay alguien que aprende a confiar y a querer a su manera.",
+                imagen: "img/inosuke.webp",
+                color: "#5D4037"
+            },
+            Giyu: {
+                nombre: "Giyu Tomioka",
+                descripcion: "Eres silencio, profundidad y una lealtad que no necesita demostrarse con palabras. Cargas con el peso de tus pérdidas en soledad pero actúas siempre con una precisión y una determinación que pocas personas pueden igualar.",
+                imagen: "img/giyu.webp",
+                color: "#1565C0"
+            },
+            Shinobu: {
+                nombre: "Shinobu Kocho",
+                descripcion: "Eres elegancia, inteligencia y una sonrisa que esconde una herida enorme. Tu aparente ligereza oculta una mente estratégica y una determinación feroz. La pérdida te define pero no te rompe — la transformas en precisión y en propósito.",
+                imagen: "img/shinobu.webp",
+                color: "#7B1FA2"
+            },
+            Rengoku: {
+                nombre: "Kyojuro Rengoku",
+                descripcion: "Eres llama viva, entusiasmo desbordante y un código de honor que nunca se dobla. Vives al máximo en cada momento y tu energía contagia a todos a tu alrededor. Para ti, arder con todo lo que tienes no es una opción — es la única forma de vivir.",
+                imagen: "img/rengoku.webp",
+                color: "#BF360C"
+            },
+            Tengen: {
+                nombre: "Tengen Uzui",
+                descripcion: "Eres extravagancia, poder y una lealtad feroz hacia los que te importan. Te mueves con estilo en todo lo que haces pero cuando llega el momento de la verdad, tu compromiso y tu fuerza no tienen igual.",
+                imagen: "img/tengen.webp",
+                color: "#F57F17"
+            },
+            Muzan: {
+                nombre: "Muzan Kibutsuji",
+                descripcion: "Eres control, perfección y una voluntad de poder que no conoce límites. No aceptas la debilidad ni en ti mismo ni en los demás. Tu mayor miedo es la pérdida y eso te ha llevado a construir una fortaleza que pocos pueden penetrar.",
+                imagen: "img/muzan.webp",
+                color: "#212121"
+            },
+            Akaza: {
+                nombre: "Akaza",
+                descripcion: "Eres fuerza, obsesión y un dolor antiguo que se transformó en algo oscuro. Buscas el poder porque en algún momento fue la única forma de proteger lo que amabas. Debajo de la frialdad hay una historia de pérdida que explica todo lo que eres.",
+                imagen: "img/akaza.webp",
+                color: "#880E4F"
+            }
         };
 
         let preguntaActual = 0;
-        let puntuaciones = { Deku:0, Bakugo:0, Todoroki:0, Uraraka:0, Iida:0, AllMight:0, Eraserhead:0, Hawks:0, Toga:0, Dabi:0 };
+        let puntuaciones = { Tanjiro:0, Nezuko:0, Zenitsu:0, Inosuke:0, Giyu:0, Shinobu:0, Rengoku:0, Tengen:0, Muzan:0, Akaza:0 };
         let seleccionActual = null;
 
         function renderPregunta() {
@@ -506,7 +503,7 @@
 
         function restartQuiz() {
             preguntaActual = 0;
-            puntuaciones = { Deku:0, Bakugo:0, Todoroki:0, Uraraka:0, Iida:0, AllMight:0, Eraserhead:0, Hawks:0, Toga:0, Dabi:0 };
+            puntuaciones = { Tanjiro:0, Nezuko:0, Zenitsu:0, Inosuke:0, Giyu:0, Shinobu:0, Rengoku:0, Tengen:0, Muzan:0, Akaza:0 };
             seleccionActual = null;
             document.getElementById('preguntaWrap').style.display = 'block';
             document.getElementById('exitBtn').style.display = 'flex';

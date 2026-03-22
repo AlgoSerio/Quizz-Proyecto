@@ -42,8 +42,46 @@
         .quiz-progress-bar { width: 100%; height: 6px; background: #E5E2DC; border-radius: 99px; overflow: hidden; }
         .quiz-progress-fill { height: 100%; background: #F97316; border-radius: 99px; transition: width 0.4s ease; }
 
-        .quiz-exit-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 auto 36px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        /* BOTONES FILA */
+        .quiz-action-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+        .quiz-exit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #fff;
+            border: 1.5px solid #EDEAE4;
+            border-radius: 99px;
+            padding: 10px 22px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
         .quiz-exit-btn:hover { border-color: #E24B4A; color: #E24B4A; background: #FFF0F0; }
+        .quiz-chars-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #fff;
+            border: 1.5px solid #EDEAE4;
+            border-radius: 99px;
+            padding: 10px 22px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-chars-btn:hover { border-color: #F97316; color: #F97316; background: #FFF7F3; }
 
         .quiz-question { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 32px; }
 
@@ -59,6 +97,7 @@
         .quiz-next:hover { background: #F97316; }
         .quiz-next.visible { display: block; }
 
+        /* MODAL SALIR */
         .exit-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; }
         .exit-modal-overlay.visible { display: flex; }
         .exit-modal { background: #fff; border-radius: 24px; padding: 40px 36px; max-width: 420px; width: 90%; text-align: center; }
@@ -71,6 +110,96 @@
         .exit-modal-leave { flex: 1; background: #E24B4A; color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .exit-modal-leave:hover { background: #C0392B; }
 
+        /* MODAL PERSONAJES */
+        .chars-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+        .chars-modal-overlay.visible { display: flex; }
+        .chars-modal {
+            background: #0D0D0D;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 860px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .chars-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .chars-modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        .chars-modal-title span { color: #F97316; }
+        .chars-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .chars-modal-close:hover { background: rgba(255,255,255,0.2); }
+
+        /* GRID PERSONAJES */
+        .chars-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .char-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: flex-end;
+        }
+        .char-card-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .char-card-img {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: bottom center;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+        }
+        .char-card-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%);
+        }
+        .char-card-name {
+            position: relative;
+            z-index: 3;
+            padding: 12px;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        /* RESULTADO */
         .result-card { display: none; border-radius: 24px; overflow: hidden; position: relative; min-height: 420px; }
         .result-card.visible { display: flex; }
         .result-card-bg-color { position: absolute; inset: 0; z-index: 0; }
@@ -107,7 +236,7 @@
     <div class="quiz-wrap" id="quizWrap">
         <div class="quiz-progress-wrap">
             <div class="quiz-progress-top">
-                <span class="quiz-progress-label">One Piece · ¿Qué personaje eres?</span>
+                <span class="quiz-progress-label">One Piece · ¿Qué personaje eres de One Piece?</span>
                 <span class="quiz-progress-num" id="progressNum">1 / 20</span>
             </div>
             <div class="quiz-progress-bar">
@@ -115,7 +244,10 @@
             </div>
         </div>
 
-        <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
+        <div class="quiz-action-row">
+            <button class="quiz-chars-btn" onclick="abrirPersonajes()">👥 Personajes disponibles</button>
+            <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
+        </div>
 
         <div id="preguntaWrap">
             <div class="quiz-question" id="questionText"></div>
@@ -141,6 +273,7 @@
         </div>
     </div>
 
+    <!-- MODAL SALIR -->
     <div class="exit-modal-overlay" id="exitModal">
         <div class="exit-modal">
             <div class="exit-modal-icon">⚠️</div>
@@ -149,6 +282,78 @@
             <div class="exit-modal-btns">
                 <button class="exit-modal-stay" onclick="cerrarModal()">Quedarse</button>
                 <button class="exit-modal-leave" onclick="window.location.href='anime.html'">✕ Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PERSONAJES -->
+    <div class="chars-modal-overlay" id="charsModal">
+        <div class="chars-modal">
+            <div class="chars-modal-header">
+                <div class="chars-modal-title">Personajes <span>disponibles</span></div>
+                <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
+            </div>
+            <div class="chars-grid">
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #E63946;"></div>
+                    <img class="char-card-img" src="img/luffy.webp" alt="Luffy">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Monkey D. Luffy</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #2D6A4F;"></div>
+                    <img class="char-card-img" src="img/zoro.webp" alt="Zoro">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Roronoa Zoro</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #F4A261;"></div>
+                    <img class="char-card-img" src="img/nami.webp" alt="Nami">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Nami</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #6D4C3D;"></div>
+                    <img class="char-card-img" src="img/usopp.webp" alt="Usopp">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Usopp</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #1A1A2E;"></div>
+                    <img class="char-card-img" src="img/sanji.webp" alt="Sanji">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Sanji</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #E84393;"></div>
+                    <img class="char-card-img" src="img/chopper.png" alt="Chopper">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Tony Tony Chopper</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #6C3483;"></div>
+                    <img class="char-card-img" src="img/robin.webp" alt="Robin">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Nico Robin</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #1A5276;"></div>
+                    <img class="char-card-img" src="img/franky.webp" alt="Franky">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Franky</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #212F3C;"></div>
+                    <img class="char-card-img" src="img/brook.webp" alt="Brook">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Brook</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #1A3A5C;"></div>
+                    <img class="char-card-img" src="img/jinbe.webp" alt="Jinbe">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Jinbe</div>
+                </div>
             </div>
         </div>
     </div>
@@ -450,15 +655,14 @@
         function mostrarResultado() {
             const ganador = Object.keys(puntuaciones).reduce((a, b) => puntuaciones[a] > puntuaciones[b] ? a : b);
             const res = resultados[ganador];
-
             document.getElementById('resultName').textContent = res.nombre;
             document.getElementById('resultDesc').textContent = res.descripcion;
             document.getElementById('resultImg').src = res.imagen;
             document.getElementById('resultImg').alt = res.nombre;
             document.getElementById('resultBgColor').style.background = res.color;
-
             document.getElementById('preguntaWrap').style.display = 'none';
             document.getElementById('exitBtn').style.display = 'none';
+            document.querySelector('.quiz-chars-btn').style.display = 'none';
             document.getElementById('progressNum').textContent = '✓ Completado';
             document.getElementById('progressFill').style.width = '100%';
             document.getElementById('resultCard').classList.add('visible');
@@ -470,6 +674,7 @@
             seleccionActual = null;
             document.getElementById('preguntaWrap').style.display = 'block';
             document.getElementById('exitBtn').style.display = 'flex';
+            document.querySelector('.quiz-chars-btn').style.display = 'flex';
             document.getElementById('resultCard').classList.remove('visible');
             const nextBtn = document.getElementById('nextBtn');
             nextBtn.style.display = '';
@@ -479,8 +684,14 @@
 
         function abrirModal() { document.getElementById('exitModal').classList.add('visible'); }
         function cerrarModal() { document.getElementById('exitModal').classList.remove('visible'); }
+        function abrirPersonajes() { document.getElementById('charsModal').classList.add('visible'); }
+        function cerrarPersonajes() { document.getElementById('charsModal').classList.remove('visible'); }
+
         document.getElementById('exitModal').addEventListener('click', function(e) {
             if (e.target === this) cerrarModal();
+        });
+        document.getElementById('charsModal').addEventListener('click', function(e) {
+            if (e.target === this) cerrarPersonajes();
         });
 
         renderPregunta();

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿A qué aldea perteneces de Naruto? - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: #F7F5F0; min-height: 100vh; }
+
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: #fff; letter-spacing: -0.5px; flex-shrink: 0; cursor: pointer; }
+        .qa-logo span { color: #F97316; }
+        .qa-search { flex: 1; max-width: 420px; position: relative; }
+        .qa-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #888; font-size: 15px; pointer-events: none; }
+        .qa-search input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 16px 10px 40px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus { background: rgba(255,255,255,0.12); border-color: rgba(249,115,22,0.5); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 99px; transition: all 0.2s; }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        .quiz-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+        .quiz-progress-wrap { margin-bottom: 36px; }
+        .quiz-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .quiz-progress-label { font-size: 13px; color: #888; font-weight: 500; }
+        .quiz-progress-num { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #0D0D0D; }
+        .quiz-progress-bar { width: 100%; height: 6px; background: #E5E2DC; border-radius: 99px; overflow: hidden; }
+        .quiz-progress-fill { height: 100%; background: #F97316; border-radius: 99px; transition: width 0.4s ease; }
+
+        .quiz-action-row { display: flex; gap: 12px; margin-bottom: 36px; }
+        .quiz-exit-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        .quiz-exit-btn:hover { border-color: #E24B4A; color: #E24B4A; background: #FFF0F0; }
+        .quiz-chars-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        .quiz-chars-btn:hover { border-color: #F97316; color: #F97316; background: #FFF7F3; }
+
+        .quiz-question { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 32px; }
+
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .quiz-option { width: 100%; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: 'DM Sans', sans-serif; }
+        .quiz-option:hover { border-color: #F97316; transform: translateX(4px); }
+        .quiz-option.selected { border-color: #F97316; background: #FFF7F3; transform: translateX(4px); }
+        .quiz-option-letter { width: 32px; height: 32px; border-radius: 8px; background: #F7F5F0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #888; flex-shrink: 0; transition: all 0.2s; }
+        .quiz-option.selected .quiz-option-letter { background: #F97316; color: #fff; }
+        .quiz-option-text { font-size: 15px; color: #0D0D0D; line-height: 1.4; }
+
+        .quiz-next { margin-top: 28px; width: 100%; background: #0D0D0D; color: #fff; border: none; border-radius: 14px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: none; }
+        .quiz-next:hover { background: #F97316; }
+        .quiz-next.visible { display: block; }
+
+        .exit-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .exit-modal-overlay.visible { display: flex; }
+        .exit-modal { background: #fff; border-radius: 24px; padding: 40px 36px; max-width: 420px; width: 90%; text-align: center; }
+        .exit-modal-icon { width: 56px; height: 56px; background: #FFF0F0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+        .exit-modal h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .exit-modal p { font-size: 15px; color: #888; line-height: 1.6; margin-bottom: 28px; }
+        .exit-modal-btns { display: flex; gap: 10px; }
+        .exit-modal-stay { flex: 1; background: #F7F5F0; color: #0D0D0D; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .exit-modal-stay:hover { background: #EDEAE4; }
+        .exit-modal-leave { flex: 1; background: #E24B4A; color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .exit-modal-leave:hover { background: #C0392B; }
+
+        .chars-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+        .chars-modal-overlay.visible { display: flex; }
+        .chars-modal { background: #0D0D0D; border-radius: 24px; padding: 40px; max-width: 860px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .chars-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .chars-modal-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .chars-modal-title span { color: #F97316; }
+        .chars-modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .chars-modal-close:hover { background: rgba(255,255,255,0.2); }
+
+        /* GRID ALDEAS - 3x2 */
+        .chars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .char-card { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 16/9; display: flex; align-items: flex-end; }
+        .char-card-bg { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; }
+        .char-card-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%); }
+        .char-card-name { position: relative; z-index: 3; padding: 16px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; line-height: 1.2; }
+        .char-card-sub { font-size: 11px; color: rgba(255,255,255,0.6); font-family: 'DM Sans', sans-serif; font-weight: 400; margin-top: 2px; }
+
+        .result-card { display: none; border-radius: 24px; overflow: hidden; position: relative; min-height: 420px; }
+        .result-card.visible { display: flex; }
+        .result-card-bg-color { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; filter: brightness(0.4); }
+        .result-card-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.1) 100%); }
+        .result-card-left { position: relative; z-index: 2; flex: 1; padding: 40px 36px; display: flex; flex-direction: column; justify-content: center; }
+        .result-card-tag { display: inline-block; background: rgba(249,115,22,0.25); color: #F97316; font-size: 12px; font-weight: 500; padding: 4px 14px; border-radius: 99px; margin-bottom: 14px; border: 1px solid rgba(249,115,22,0.4); width: fit-content; }
+        .result-card-eres { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 4px; font-weight: 500; }
+        .result-card-name { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1; margin-bottom: 16px; }
+        .result-card-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 28px; max-width: 400px; }
+        .result-card-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .result-btn-retry { background: #F97316; color: #fff; border: none; border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-retry:hover { background: #EA6B0A; transform: translateY(-1px); }
+        .result-btn-back { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-back:hover { background: rgba(255,255,255,0.18); }
+        .result-card-right { position: relative; z-index: 2; width: 300px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .result-card-right img { width: 80%; height: 80%; object-fit: contain; filter: drop-shadow(0 0 30px rgba(255,255,255,0.2)); }
+    </style>
+</head>
+<body>
+
+    <header class="qa-header" id="mainHeader">
+        <div class="qa-logo" onclick="window.location.href='../inicio.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="../inicio.html">Inicio</a>
+            <a href="../categorias.html">Categorías</a>
+            <a href="#">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <div class="quiz-wrap" id="quizWrap">
+        <div class="quiz-progress-wrap">
+            <div class="quiz-progress-top">
+                <span class="quiz-progress-label">Naruto · ¿A qué aldea perteneces?</span>
+                <span class="quiz-progress-num" id="progressNum">1 / 18</span>
+            </div>
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" id="progressFill" style="width: 5.5%;"></div>
+            </div>
+        </div>
+
+        <div class="quiz-action-row">
+            <button class="quiz-chars-btn" onclick="abrirPersonajes()">🏯 Aldeas disponibles</button>
+            <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
+        </div>
+
+        <div id="preguntaWrap">
+            <div class="quiz-question" id="questionText"></div>
+            <div class="quiz-options" id="optionsWrap"></div>
+            <button class="quiz-next" id="nextBtn" onclick="nextQuestion()">Siguiente pregunta →</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-card-bg-color" id="resultBgColor"></div>
+            <div class="result-card-overlay"></div>
+            <div class="result-card-left">
+                <div class="result-card-tag">👁️ Naruto</div>
+                <div class="result-card-eres">Tu aldea es...</div>
+                <div class="result-card-name" id="resultName"></div>
+                <div class="result-card-desc" id="resultDesc"></div>
+                <div class="result-card-btns">
+                    <button class="result-btn-retry" onclick="restartQuiz()">Repetir quiz</button>
+                    <button class="result-btn-back" onclick="window.location.href='anime.html'">Volver a Anime</button>
+                </div>
+            </div>
+            <div class="result-card-right">
+                <img id="resultImg" src="" alt="Aldea">
+            </div>
+        </div>
+    </div>
+
+    <div class="exit-modal-overlay" id="exitModal">
+        <div class="exit-modal">
+            <div class="exit-modal-icon">⚠️</div>
+            <h2>¿Seguro que quieres salir?</h2>
+            <p>Si sales ahora perderás todo tu progreso y tus respuestas no se guardarán.</p>
+            <div class="exit-modal-btns">
+                <button class="exit-modal-stay" onclick="cerrarModal()">Quedarse</button>
+                <button class="exit-modal-leave" onclick="window.location.href='anime.html'">✕ Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chars-modal-overlay" id="charsModal">
+        <div class="chars-modal">
+            <div class="chars-modal-header">
+                <div class="chars-modal-title">Aldeas <span>disponibles</span></div>
+                <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
+            </div>
+            <div class="chars-grid">
+                <div class="char-card">
+                    <div class="char-card-bg" style="background-image: url('img/konoha.webp'); background-color: #2E7D32;"></div>
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Konoha<div class="char-card-sub">Aldea Oculta de la Hoja</div></div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background-image: url('img/suna.webp'); background-color: #E65100;"></div>
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Sunagakure<div class="char-card-sub">Aldea Oculta de la Arena</div></div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background-image: url('img/kiri.webp'); background-color: #1565C0;"></div>
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Kirigakure<div class="char-card-sub">Aldea Oculta de la Niebla</div></div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background-image: url('img/kumo.webp'); background-color: #4527A0;"></div>
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Kumogakure<div class="char-card-sub">Aldea Oculta de las Nubes</div></div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background-image: url('img/iwa.webp'); background-color: #4E342E;"></div>
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Iwagakure<div class="char-card-sub">Aldea Oculta de la Roca</div></div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background-image: url('img/oto.webp'); background-color: #212121;"></div>
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Otogakure<div class="char-card-sub">Aldea Oculta del Sonido</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = [
+            {
+                texto: "¿Cuál es tu mayor valor en la vida?",
+                opciones: [
+                    { texto: "La lealtad a mis compañeros y nunca abandonar a nadie.", aldea: "Konoha" },
+                    { texto: "La resistencia y adaptarse a cualquier adversidad.", aldea: "Suna" },
+                    { texto: "La fuerza y el dominio sobre los demás.", aldea: "Kiri" },
+                    { texto: "El poder y la velocidad para superar cualquier obstáculo.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu entorno ideal para vivir?",
+                opciones: [
+                    { texto: "Un lugar cálido y lleno de vida rodeado de naturaleza.", aldea: "Konoha" },
+                    { texto: "Un desierto vasto donde solo los más fuertes sobreviven.", aldea: "Suna" },
+                    { texto: "Un lugar envuelto en niebla donde los secretos se guardan bien.", aldea: "Kiri" },
+                    { texto: "Las alturas, entre nubes y tormentas que dan poder.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cómo afrontas un conflicto?",
+                opciones: [
+                    { texto: "Buscando el diálogo primero pero sin dudar en pelear si es necesario.", aldea: "Konoha" },
+                    { texto: "Con paciencia y estrategia, esperando el momento exacto.", aldea: "Suna" },
+                    { texto: "Con frialdad y contundencia, sin dejar margen al error.", aldea: "Kiri" },
+                    { texto: "De frente y con toda la fuerza disponible.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Qué elemento te representa mejor?",
+                opciones: [
+                    { texto: "El fuego, cálido y protector pero devastador si se descontrola.", aldea: "Konoha" },
+                    { texto: "La tierra, sólida, resistente e inamovible.", aldea: "Iwa" },
+                    { texto: "El agua, que fluye en silencio pero puede arrasar con todo.", aldea: "Kiri" },
+                    { texto: "El rayo, veloz, impredecible y lleno de poder.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cómo ves a los que son diferentes a ti?",
+                opciones: [
+                    { texto: "Con curiosidad y apertura, la diversidad enriquece.", aldea: "Konoha" },
+                    { texto: "Con cautela, no confío fácilmente en los extraños.", aldea: "Suna" },
+                    { texto: "Con desconfianza, en mi mundo la diferencia puede ser peligrosa.", aldea: "Kiri" },
+                    { texto: "Como rivales potenciales a los que superar.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu actitud ante el poder?",
+                opciones: [
+                    { texto: "Es una responsabilidad para proteger a los demás.", aldea: "Konoha" },
+                    { texto: "Es necesario para sobrevivir en un mundo hostil.", aldea: "Suna" },
+                    { texto: "Es la única moneda que vale en este mundo.", aldea: "Kiri" },
+                    { texto: "Es algo que se conquista y se demuestra constantemente.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu forma de liderar?",
+                opciones: [
+                    { texto: "Inspirando a los demás con el ejemplo y el corazón.", aldea: "Konoha" },
+                    { texto: "Con frialdad y precisión, las emociones no tienen lugar.", aldea: "Suna" },
+                    { texto: "Con autoridad absoluta que nadie puede cuestionar.", aldea: "Kiri" },
+                    { texto: "Con fuerza y velocidad que dejan sin opciones al rival.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Qué harías si tuvieras que elegir entre la misión y un compañero?",
+                opciones: [
+                    { texto: "Elegiría al compañero, siempre. Los nakama son primero.", aldea: "Konoha" },
+                    { texto: "La misión, el deber está por encima de los sentimientos.", aldea: "Suna" },
+                    { texto: "Dependería del valor estratégico de cada opción.", aldea: "Kiri" },
+                    { texto: "Buscaría la forma de completar ambas sin comprometer ninguna.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor fortaleza como ninja?",
+                opciones: [
+                    { texto: "La adaptabilidad y el trabajo en equipo.", aldea: "Konoha" },
+                    { texto: "La resistencia y el control del chakra en condiciones extremas.", aldea: "Suna" },
+                    { texto: "La capacidad de operar en la oscuridad sin ser detectado.", aldea: "Kiri" },
+                    { texto: "La velocidad y el poder de ataque directo.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cómo ves la traición?",
+                opciones: [
+                    { texto: "Como la herida más profunda, pero siempre hay posibilidad de redención.", aldea: "Konoha" },
+                    { texto: "Como algo que debe castigarse con dureza para mantener el orden.", aldea: "Suna" },
+                    { texto: "Como una debilidad que no me permitiría perdonar.", aldea: "Kiri" },
+                    { texto: "Como algo que no toleraría bajo ninguna circunstancia.", aldea: "Iwa" }
+                ]
+            },
+            {
+                texto: "¿Qué ambiente de entrenamiento prefieres?",
+                opciones: [
+                    { texto: "Bosques y espacios abiertos donde el equipo se forja junto.", aldea: "Konoha" },
+                    { texto: "El desierto, donde el calor y la soledad forjan la mente.", aldea: "Suna" },
+                    { texto: "La niebla y la oscuridad, donde los sentidos se agudizan.", aldea: "Kiri" },
+                    { texto: "Las alturas y las tormentas, donde el cuerpo se lleva al límite.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu relación con las emociones?",
+                opciones: [
+                    { texto: "Las abrazo, me hacen más fuerte y me conectan con los demás.", aldea: "Konoha" },
+                    { texto: "Las controlo, no puedo dejar que interfieran en mis decisiones.", aldea: "Suna" },
+                    { texto: "Las oculto, mostrarlas sería una señal de debilidad.", aldea: "Kiri" },
+                    { texto: "Las transformo en combustible para superarme.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Qué tipo de técnicas ninja te atraen más?",
+                opciones: [
+                    { texto: "Ninjutsu variado y técnicas de fuego o múltiples elementos.", aldea: "Konoha" },
+                    { texto: "Técnicas de arena y control del entorno.", aldea: "Suna" },
+                    { texto: "Técnicas de agua y ocultamiento en la niebla.", aldea: "Kiri" },
+                    { texto: "Técnicas de rayo y velocidad extrema.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cómo defines la paz?",
+                opciones: [
+                    { texto: "La convivencia entre aldeas y el fin de los ciclos de odio.", aldea: "Konoha" },
+                    { texto: "Un equilibrio de poder donde nadie se atreva a atacar.", aldea: "Suna" },
+                    { texto: "Algo que solo existe cuando eres suficientemente poderoso para imponerla.", aldea: "Kiri" },
+                    { texto: "El resultado de demostrar que eres el más fuerte de todos.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu actitud ante los secretos?",
+                opciones: [
+                    { texto: "Prefiero la transparencia aunque a veces los secretos protejan.", aldea: "Konoha" },
+                    { texto: "Son herramientas necesarias para sobrevivir en el mundo ninja.", aldea: "Suna" },
+                    { texto: "Son mi especialidad, la información es poder.", aldea: "Kiri" },
+                    { texto: "Los guardo cuando es necesario pero actúo con contundencia.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Qué te motiva a seguir entrenando?",
+                opciones: [
+                    { texto: "Proteger a los que amo y cumplir mis promesas.", aldea: "Konoha" },
+                    { texto: "Superar mis límites en las condiciones más extremas.", aldea: "Suna" },
+                    { texto: "Convertirme en alguien que nadie pueda detener.", aldea: "Kiri" },
+                    { texto: "Ser el más poderoso y veloz de mi generación.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu relación con la tradición?",
+                opciones: [
+                    { texto: "La respeto y la honro aunque busco evolucionar.", aldea: "Konoha" },
+                    { texto: "Es la base de mi identidad y no la cuestionaría.", aldea: "Iwa" },
+                    { texto: "La uso cuando me conviene pero no me ata a ella.", aldea: "Kiri" },
+                    { texto: "La rompo cuando es necesario para avanzar.", aldea: "Kumo" }
+                ]
+            },
+            {
+                texto: "¿Qué harías con un poder absoluto?",
+                opciones: [
+                    { texto: "Crear un mundo donde nadie tenga que sufrir más.", aldea: "Konoha" },
+                    { texto: "Asegurar la supervivencia y prosperidad de mi pueblo.", aldea: "Suna" },
+                    { texto: "Dominar para que nadie vuelva a amenazarme jamás.", aldea: "Kiri" },
+                    { texto: "Demostrar que ningún otro poder puede igualarme.", aldea: "Oto" }
+                ]
+            }
+        ];
+
+        const resultados = {
+            Konoha: {
+                nombre: "Konoha",
+                descripcion: "Perteneces a la Aldea Oculta de la Hoja. Eres leal, compasivo y pones a tu equipo por encima de todo. Crees en la convivencia y en que los lazos entre personas son la verdadera fuente de poder. El Will of Fire arde en tu interior.",
+                imagen: "img/konoha.webp",
+                color: "#2E7D32"
+            },
+            Suna: {
+                nombre: "Sunagakure",
+                descripcion: "Perteneces a la Aldea Oculta de la Arena. Eres resistente, frío bajo presión y capaz de sobrevivir en las condiciones más extremas. Tu fortaleza viene de adaptarte a lo hostil y de controlar el entorno a tu favor.",
+                imagen: "img/suna.webp",
+                color: "#E65100"
+            },
+            Kiri: {
+                nombre: "Kirigakure",
+                descripcion: "Perteneces a la Aldea Oculta de la Niebla. Eres misterioso, calculador y no muestras tus cartas hasta el momento exacto. Operas desde las sombras y tu poder radica en que nadie sabe jamás qué piensas realmente.",
+                imagen: "img/kiri.webp",
+                color: "#1565C0"
+            },
+            Kumo: {
+                nombre: "Kumogakure",
+                descripcion: "Perteneces a la Aldea Oculta de las Nubes. Eres directo, poderoso y competitivo. Te lanzas de frente a los desafíos con velocidad y fuerza sin igual. Para ti el poder se demuestra con hechos, no con palabras.",
+                imagen: "img/kumo.webp",
+                color: "#4527A0"
+            },
+            Iwa: {
+                nombre: "Iwagakure",
+                descripcion: "Perteneces a la Aldea Oculta de la Roca. Eres sólido, inamovible y profundamente leal a tu tierra y tus tradiciones. No te doblas ante nadie y tu fortaleza viene de una convicción que nada puede erosionar.",
+                imagen: "img/iwa.webp",
+                color: "#4E342E"
+            },
+            Oto: {
+                nombre: "Otogakure",
+                descripcion: "Perteneces a la Aldea Oculta del Sonido. Eres ambicioso, iconoclasta y no te rigen las reglas de los demás. Buscas el poder por encima de todo y no temes cruzar las líneas que otros no se atreven a traspasar.",
+                imagen: "img/oto.webp",
+                color: "#212121"
+            }
+        };
+
+        let preguntaActual = 0;
+        let puntuaciones = { Konoha:0, Suna:0, Kiri:0, Kumo:0, Iwa:0, Oto:0 };
+        let seleccionActual = null;
+
+        function renderPregunta() {
+            const p = preguntas[preguntaActual];
+            document.getElementById('questionText').textContent = p.texto;
+            document.getElementById('progressNum').textContent = (preguntaActual + 1) + ' / ' + preguntas.length;
+            document.getElementById('progressFill').style.width = ((preguntaActual + 1) / preguntas.length * 100) + '%';
+            const letras = ['A', 'B', 'C', 'D'];
+            const wrap = document.getElementById('optionsWrap');
+            wrap.innerHTML = '';
+            p.opciones.forEach((op, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<div class="quiz-option-letter">${letras[i]}</div><div class="quiz-option-text">${op.texto}</div>`;
+                btn.onclick = () => seleccionar(btn, op.aldea);
+                wrap.appendChild(btn);
+            });
+            seleccionActual = null;
+        }
+
+        function seleccionar(btn, aldea) {
+            document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            seleccionActual = aldea;
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.classList.add('visible');
+            const esUltima = preguntaActual === preguntas.length - 1;
+            nextBtn.textContent = esUltima ? 'Ver mi resultado →' : 'Siguiente pregunta →';
+        }
+
+        function nextQuestion() {
+            if (!seleccionActual) return;
+            puntuaciones[seleccionActual]++;
+            preguntaActual++;
+            if (preguntaActual >= preguntas.length) {
+                mostrarResultado();
+            } else {
+                renderPregunta();
+            }
+        }
+
+        function mostrarResultado() {
+            const ganador = Object.keys(puntuaciones).reduce((a, b) => puntuaciones[a] > puntuaciones[b] ? a : b);
+            const res = resultados[ganador];
+            document.getElementById('resultName').textContent = res.nombre;
+            document.getElementById('resultDesc').textContent = res.descripcion;
+            document.getElementById('resultImg').src = res.imagen;
+            document.getElementById('resultImg').alt = res.nombre;
+            document.getElementById('resultBgColor').style.backgroundImage = `url('${res.imagen}')`;
+            document.getElementById('resultBgColor').style.backgroundColor = res.color;
+            document.getElementById('preguntaWrap').style.display = 'none';
+            document.getElementById('exitBtn').style.display = 'none';
+            document.querySelector('.quiz-chars-btn').style.display = 'none';
+            document.getElementById('progressNum').textContent = '✓ Completado';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('resultCard').classList.add('visible');
+        }
+
+        function restartQuiz() {
+            preguntaActual = 0;
+            puntuaciones = { Konoha:0, Suna:0, Kiri:0, Kumo:0, Iwa:0, Oto:0 };
+            seleccionActual = null;
+            document.getElementById('preguntaWrap').style.display = 'block';
+            document.getElementById('exitBtn').style.display = 'flex';
+            document.querySelector('.quiz-chars-btn').style.display = 'flex';
+            document.getElementById('resultCard').classList.remove('visible');
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.style.display = '';
+            nextBtn.classList.remove('visible');
+            renderPregunta();
+        }
+
+        function abrirModal() { document.getElementById('exitModal').classList.add('visible'); }
+        function cerrarModal() { document.getElementById('exitModal').classList.remove('visible'); }
+        function abrirPersonajes() { document.getElementById('charsModal').classList.add('visible'); }
+        function cerrarPersonajes() { document.getElementById('charsModal').classList.remove('visible'); }
+
+        document.getElementById('exitModal').addEventListener('click', function(e) { if (e.target === this) cerrarModal(); });
+        document.getElementById('charsModal').addEventListener('click', function(e) { if (e.target === this) cerrarPersonajes(); });
+
+        renderPregunta();
+    </script>
+
+</body>
+</html>
