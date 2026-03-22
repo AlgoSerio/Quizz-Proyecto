@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué personaje eres de One Piece? - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: #F7F5F0; min-height: 100vh; }
+
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: #fff; letter-spacing: -0.5px; flex-shrink: 0; cursor: pointer; }
+        .qa-logo span { color: #F97316; }
+        .qa-search { flex: 1; max-width: 420px; position: relative; }
+        .qa-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #888; font-size: 15px; pointer-events: none; }
+        .qa-search input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 16px 10px 40px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus { background: rgba(255,255,255,0.12); border-color: rgba(249,115,22,0.5); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 99px; transition: all 0.2s; }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        .quiz-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+        .quiz-progress-wrap { margin-bottom: 36px; }
+        .quiz-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .quiz-progress-label { font-size: 13px; color: #888; font-weight: 500; }
+        .quiz-progress-num { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #0D0D0D; }
+        .quiz-progress-bar { width: 100%; height: 6px; background: #E5E2DC; border-radius: 99px; overflow: hidden; }
+        .quiz-progress-fill { height: 100%; background: #F97316; border-radius: 99px; transition: width 0.4s ease; }
+
+        /* BOTONES FILA */
+        .quiz-action-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 36px;
+        }
+        .quiz-exit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #fff;
+            border: 1.5px solid #EDEAE4;
+            border-radius: 99px;
+            padding: 10px 22px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-exit-btn:hover { border-color: #E24B4A; color: #E24B4A; background: #FFF0F0; }
+        .quiz-chars-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: #fff;
+            border: 1.5px solid #EDEAE4;
+            border-radius: 99px;
+            padding: 10px 22px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-chars-btn:hover { border-color: #F97316; color: #F97316; background: #FFF7F3; }
+
+        .quiz-question { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 32px; }
+
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .quiz-option { width: 100%; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: 'DM Sans', sans-serif; }
+        .quiz-option:hover { border-color: #F97316; transform: translateX(4px); }
+        .quiz-option.selected { border-color: #F97316; background: #FFF7F3; transform: translateX(4px); }
+        .quiz-option-letter { width: 32px; height: 32px; border-radius: 8px; background: #F7F5F0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #888; flex-shrink: 0; transition: all 0.2s; }
+        .quiz-option.selected .quiz-option-letter { background: #F97316; color: #fff; }
+        .quiz-option-text { font-size: 15px; color: #0D0D0D; line-height: 1.4; }
+
+        .quiz-next { margin-top: 28px; width: 100%; background: #0D0D0D; color: #fff; border: none; border-radius: 14px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: none; }
+        .quiz-next:hover { background: #F97316; }
+        .quiz-next.visible { display: block; }
+
+        /* MODAL SALIR */
+        .exit-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .exit-modal-overlay.visible { display: flex; }
+        .exit-modal { background: #fff; border-radius: 24px; padding: 40px 36px; max-width: 420px; width: 90%; text-align: center; }
+        .exit-modal-icon { width: 56px; height: 56px; background: #FFF0F0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+        .exit-modal h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .exit-modal p { font-size: 15px; color: #888; line-height: 1.6; margin-bottom: 28px; }
+        .exit-modal-btns { display: flex; gap: 10px; }
+        .exit-modal-stay { flex: 1; background: #F7F5F0; color: #0D0D0D; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .exit-modal-stay:hover { background: #EDEAE4; }
+        .exit-modal-leave { flex: 1; background: #E24B4A; color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .exit-modal-leave:hover { background: #C0392B; }
+
+        /* MODAL PERSONAJES */
+        .chars-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+        .chars-modal-overlay.visible { display: flex; }
+        .chars-modal {
+            background: #0D0D0D;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 860px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .chars-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+        .chars-modal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -0.5px;
+        }
+        .chars-modal-title span { color: #F97316; }
+        .chars-modal-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .chars-modal-close:hover { background: rgba(255,255,255,0.2); }
+
+        /* GRID PERSONAJES */
+        .chars-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+        }
+        .char-card {
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            aspect-ratio: 3/4;
+            display: flex;
+            align-items: flex-end;
+        }
+        .char-card-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+        }
+        .char-card-img {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: bottom center;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+        }
+        .char-card-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%);
+        }
+        .char-card-name {
+            position: relative;
+            z-index: 3;
+            padding: 12px;
+            font-family: 'Syne', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        /* RESULTADO */
+        .result-card { display: none; border-radius: 24px; overflow: hidden; position: relative; min-height: 420px; }
+        .result-card.visible { display: flex; }
+        .result-card-bg-color { position: absolute; inset: 0; z-index: 0; }
+        .result-card-left { position: relative; z-index: 1; flex: 1; padding: 40px 36px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.75) 70%, rgba(0,0,0,0) 100%); }
+        .result-card-tag { display: inline-block; background: rgba(249,115,22,0.25); color: #F97316; font-size: 12px; font-weight: 500; padding: 4px 14px; border-radius: 99px; margin-bottom: 14px; border: 1px solid rgba(249,115,22,0.4); width: fit-content; }
+        .result-card-eres { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 4px; font-weight: 500; }
+        .result-card-name { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1; margin-bottom: 16px; }
+        .result-card-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 28px; max-width: 340px; }
+        .result-card-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .result-btn-retry { background: #F97316; color: #fff; border: none; border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-retry:hover { background: #EA6B0A; transform: translateY(-1px); }
+        .result-btn-back { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-back:hover { background: rgba(255,255,255,0.18); }
+        .result-card-right { position: relative; z-index: 1; width: 280px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+        .result-card-right img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 0 20px rgba(0,0,0,0.4)); }
+    </style>
+</head>
+<body>
+
+    <header class="qa-header" id="mainHeader">
+        <div class="qa-logo" onclick="window.location.href='../inicio.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="../inicio.html">Inicio</a>
+            <a href="../categorias.html">Categorías</a>
+            <a href="#">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <div class="quiz-wrap" id="quizWrap">
+        <div class="quiz-progress-wrap">
+            <div class="quiz-progress-top">
+                <span class="quiz-progress-label">One Piece · ¿Qué personaje eres de One Piece?</span>
+                <span class="quiz-progress-num" id="progressNum">1 / 20</span>
+            </div>
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" id="progressFill" style="width: 5%;"></div>
+            </div>
+        </div>
+
+        <div class="quiz-action-row">
+            <button class="quiz-chars-btn" onclick="abrirPersonajes()">👥 Personajes disponibles</button>
+            <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
+        </div>
+
+        <div id="preguntaWrap">
+            <div class="quiz-question" id="questionText"></div>
+            <div class="quiz-options" id="optionsWrap"></div>
+            <button class="quiz-next" id="nextBtn" onclick="nextQuestion()">Siguiente pregunta →</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-card-bg-color" id="resultBgColor"></div>
+            <div class="result-card-left">
+                <div class="result-card-tag">🏴‍☠️ One Piece</div>
+                <div class="result-card-eres">Eres...</div>
+                <div class="result-card-name" id="resultName"></div>
+                <div class="result-card-desc" id="resultDesc"></div>
+                <div class="result-card-btns">
+                    <button class="result-btn-retry" onclick="restartQuiz()">Repetir quiz</button>
+                    <button class="result-btn-back" onclick="window.location.href='anime.html'">Volver a Anime</button>
+                </div>
+            </div>
+            <div class="result-card-right">
+                <img id="resultImg" src="" alt="Personaje">
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SALIR -->
+    <div class="exit-modal-overlay" id="exitModal">
+        <div class="exit-modal">
+            <div class="exit-modal-icon">⚠️</div>
+            <h2>¿Seguro que quieres salir?</h2>
+            <p>Si sales ahora perderás todo tu progreso y tus respuestas no se guardarán.</p>
+            <div class="exit-modal-btns">
+                <button class="exit-modal-stay" onclick="cerrarModal()">Quedarse</button>
+                <button class="exit-modal-leave" onclick="window.location.href='anime.html'">✕ Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PERSONAJES -->
+    <div class="chars-modal-overlay" id="charsModal">
+        <div class="chars-modal">
+            <div class="chars-modal-header">
+                <div class="chars-modal-title">Personajes <span>disponibles</span></div>
+                <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
+            </div>
+            <div class="chars-grid">
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #E63946;"></div>
+                    <img class="char-card-img" src="img/luffy.webp" alt="Luffy">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Monkey D. Luffy</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #2D6A4F;"></div>
+                    <img class="char-card-img" src="img/zoro.webp" alt="Zoro">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Roronoa Zoro</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #F4A261;"></div>
+                    <img class="char-card-img" src="img/nami.webp" alt="Nami">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Nami</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #6D4C3D;"></div>
+                    <img class="char-card-img" src="img/usopp.webp" alt="Usopp">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Usopp</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #1A1A2E;"></div>
+                    <img class="char-card-img" src="img/sanji.webp" alt="Sanji">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Sanji</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #E84393;"></div>
+                    <img class="char-card-img" src="img/chopper.png" alt="Chopper">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Tony Tony Chopper</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #6C3483;"></div>
+                    <img class="char-card-img" src="img/robin.webp" alt="Robin">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Nico Robin</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #1A5276;"></div>
+                    <img class="char-card-img" src="img/franky.webp" alt="Franky">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Franky</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #212F3C;"></div>
+                    <img class="char-card-img" src="img/brook.webp" alt="Brook">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Brook</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background: #1A3A5C;"></div>
+                    <img class="char-card-img" src="img/jinbe.webp" alt="Jinbe">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Jinbe</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = [
+            {
+                texto: "¿Cómo reaccionas cuando alguien amenaza a tus amigos?",
+                opciones: [
+                    { texto: "Me lanzo sin pensarlo, no me importa el riesgo.", personaje: "Luffy" },
+                    { texto: "Evalúo la situación y actúo con precisión calculada.", personaje: "Zoro" },
+                    { texto: "Busco la forma más inteligente de resolverlo.", personaje: "Nami" },
+                    { texto: "Uso el humor para destensar y luego actúo.", personaje: "Usopp" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor motivación en la vida?",
+                opciones: [
+                    { texto: "La libertad total y encontrar el tesoro definitivo.", personaje: "Luffy" },
+                    { texto: "Ser el mejor espadachín del mundo sin excepción.", personaje: "Zoro" },
+                    { texto: "Tener estabilidad, dinero y proteger a los míos.", personaje: "Nami" },
+                    { texto: "Demostrarle al mundo de lo que soy capaz.", personaje: "Usopp" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu forma de expresar amor hacia los demás?",
+                opciones: [
+                    { texto: "Con comida deliciosa preparada con todo mi cariño.", personaje: "Sanji" },
+                    { texto: "Protegiéndoles aunque me cueste la vida.", personaje: "Chopper" },
+                    { texto: "Estudiando su pasado para entenderles mejor.", personaje: "Robin" },
+                    { texto: "Construyendo algo increíble que les facilite la vida.", personaje: "Franky" }
+                ]
+            },
+            {
+                texto: "¿Qué harías ante un enemigo más fuerte que tú?",
+                opciones: [
+                    { texto: "Peleo igualmente, ¡nunca me rindo!", personaje: "Luffy" },
+                    { texto: "Acepto la derrota pero entreno hasta superarlo.", personaje: "Zoro" },
+                    { texto: "Huyo estratégicamente y busco una forma mejor de ganar.", personaje: "Nami" },
+                    { texto: "Intento engañarlo usando el entorno a mi favor.", personaje: "Usopp" }
+                ]
+            },
+            {
+                texto: "¿Qué palabra te define mejor?",
+                opciones: [
+                    { texto: "Caballeroso", personaje: "Sanji" },
+                    { texto: "Tierno", personaje: "Chopper" },
+                    { texto: "Misterioso", personaje: "Robin" },
+                    { texto: "Extravagante", personaje: "Franky" }
+                ]
+            },
+            {
+                texto: "¿Cómo te comportas en una celebración?",
+                opciones: [
+                    { texto: "Como sin parar y me lo paso genial con todos.", personaje: "Luffy" },
+                    { texto: "Bebo tranquilo en un rincón observando.", personaje: "Zoro" },
+                    { texto: "Cocino o llevo la mejor comida de la fiesta.", personaje: "Sanji" },
+                    { texto: "Me emociono mucho y me uno a todos los juegos.", personaje: "Chopper" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor debilidad?",
+                opciones: [
+                    { texto: "Soy demasiado impulsivo y no pienso las consecuencias.", personaje: "Luffy" },
+                    { texto: "Soy tan obstinado que a veces me perjudico.", personaje: "Zoro" },
+                    { texto: "Me enamoro demasiado fácil y pierdo el juicio.", personaje: "Sanji" },
+                    { texto: "Soy demasiado ingenuo y confío en todo el mundo.", personaje: "Chopper" }
+                ]
+            },
+            {
+                texto: "¿Qué tipo de sueño persigues?",
+                opciones: [
+                    { texto: "Uno enorme que parece imposible para cualquier otro.", personaje: "Luffy" },
+                    { texto: "Un juramento que cumpliré sin importar el precio.", personaje: "Zoro" },
+                    { texto: "Cartografiar el mundo entero con total precisión.", personaje: "Nami" },
+                    { texto: "Ser reconocido como el mejor en lo que hago.", personaje: "Usopp" }
+                ]
+            },
+            {
+                texto: "¿Cómo tratas a tus rivales tras derrotarlos?",
+                opciones: [
+                    { texto: "Los invito a unirse o los dejo ir sin rencor.", personaje: "Luffy" },
+                    { texto: "Los respeto si lucharon con honor y sigo adelante.", personaje: "Zoro" },
+                    { texto: "Si son mujeres, las trato con toda la caballerosidad.", personaje: "Sanji" },
+                    { texto: "Los curo si están heridos, no importa de qué lado.", personaje: "Chopper" }
+                ]
+            },
+            {
+                texto: "¿Qué valoras más en una amistad?",
+                opciones: [
+                    { texto: "La lealtad absoluta pase lo que pase.", personaje: "Luffy" },
+                    { texto: "El respeto mutuo sin necesitar palabras.", personaje: "Zoro" },
+                    { texto: "La honestidad y que sean de total confianza.", personaje: "Nami" },
+                    { texto: "Compartir aventuras y apoyarse en momentos difíciles.", personaje: "Usopp" }
+                ]
+            },
+            {
+                texto: "¿Cuál sería tu rol ideal en un equipo?",
+                opciones: [
+                    { texto: "El líder que inspira con su presencia y fuerza.", personaje: "Luffy" },
+                    { texto: "El estratega que cuida los recursos y planifica.", personaje: "Nami" },
+                    { texto: "El cocinero que mantiene la moral y la energía alta.", personaje: "Sanji" },
+                    { texto: "El médico que cuida de todos y nunca abandona.", personaje: "Chopper" }
+                ]
+            },
+            {
+                texto: "¿Cómo afrontas el miedo?",
+                opciones: [
+                    { texto: "Simplemente no lo siento o directamente lo ignoro.", personaje: "Luffy" },
+                    { texto: "Lo enfrento en silencio con pura disciplina.", personaje: "Zoro" },
+                    { texto: "Lo reconozco, tiemblo, pero actúo de todas formas.", personaje: "Usopp" },
+                    { texto: "Lo analizo fríamente y busco una salida racional.", personaje: "Robin" }
+                ]
+            },
+            {
+                texto: "¿Qué harías con una semana libre en una isla paradisíaca?",
+                opciones: [
+                    { texto: "Explorar cada rincón en busca de aventura.", personaje: "Luffy" },
+                    { texto: "Entrenar sin parar para mejorar mis habilidades.", personaje: "Zoro" },
+                    { texto: "Cocinar los mejores platos con los ingredientes locales.", personaje: "Sanji" },
+                    { texto: "Leer y estudiar la historia y cultura del lugar.", personaje: "Robin" }
+                ]
+            },
+            {
+                texto: "¿Cómo reaccionas ante la injusticia?",
+                opciones: [
+                    { texto: "Me enfrento directamente sin importar las consecuencias.", personaje: "Luffy" },
+                    { texto: "Actúo cuando es necesario pero sin dramas innecesarios.", personaje: "Zoro" },
+                    { texto: "La documento y busco la forma más eficaz de combatirla.", personaje: "Robin" },
+                    { texto: "Construyo algo que ayude a cambiar la situación.", personaje: "Franky" }
+                ]
+            },
+            {
+                texto: "¿Qué tipo de música prefieres?",
+                opciones: [
+                    { texto: "Música alegre y animada que me da energía.", personaje: "Luffy" },
+                    { texto: "Melodías tranquilas que me ayudan a concentrarme.", personaje: "Zoro" },
+                    { texto: "Canciones románticas y emotivas.", personaje: "Sanji" },
+                    { texto: "Música clásica o de épocas pasadas con historia.", personaje: "Brook" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu relación con el pasado?",
+                opciones: [
+                    { texto: "Vivo el presente, el pasado ya no importa.", personaje: "Luffy" },
+                    { texto: "Lo uso como combustible para seguir adelante.", personaje: "Zoro" },
+                    { texto: "Cargo con él en silencio pero no dejo que me pare.", personaje: "Robin" },
+                    { texto: "Lo recuerdo con nostalgia pero sigo adelante con humor.", personaje: "Brook" }
+                ]
+            },
+            {
+                texto: "¿Qué harías si tuvieras que despedirte de alguien para siempre?",
+                opciones: [
+                    { texto: "No me despediría, encontraría la forma de volver a verle.", personaje: "Luffy" },
+                    { texto: "Un apretón de manos firme, sin palabras de más.", personaje: "Zoro" },
+                    { texto: "Les cocinaría su plato favorito como último regalo.", personaje: "Sanji" },
+                    { texto: "Tocaría una canción para que me recuerden siempre.", personaje: "Brook" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu sentido del humor?",
+                opciones: [
+                    { texto: "Inocente y espontáneo, me río de todo.", personaje: "Luffy" },
+                    { texto: "Seco y sarcástico, pocas veces pero efectivo.", personaje: "Zoro" },
+                    { texto: "Exagerado y dramático, me encanta el show.", personaje: "Usopp" },
+                    { texto: "Oscuro y refinado, aprecio el humor inteligente.", personaje: "Robin" }
+                ]
+            },
+            {
+                texto: "¿Qué es lo primero que haces al llegar a una ciudad nueva?",
+                opciones: [
+                    { texto: "Buscar comida, ¡tengo hambre siempre!", personaje: "Luffy" },
+                    { texto: "Buscar un dojo o alguien con quien entrenar.", personaje: "Zoro" },
+                    { texto: "Buscar el mejor restaurante para cenar esta noche.", personaje: "Sanji" },
+                    { texto: "Ir a la librería o biblioteca a explorar su historia.", personaje: "Robin" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu filosofía de vida?",
+                opciones: [
+                    { texto: "Ser libre y hacer lo que me hace feliz.", personaje: "Luffy" },
+                    { texto: "Cumplir mis promesas cueste lo que cueste.", personaje: "Zoro" },
+                    { texto: "La vida es corta, hay que disfrutarla al máximo.", personaje: "Franky" },
+                    { texto: "Incluso en la oscuridad siempre hay razones para reír.", personaje: "Brook" }
+                ]
+            }
+        ];
+
+        const resultados = {
+            Luffy: {
+                nombre: "Monkey D. Luffy",
+                descripcion: "Eres pura energía y libertad. No te importan las reglas ni las expectativas — solo sigues tu corazón con una convicción inquebrantable. La gente te sigue porque irradias algo que no se puede forzar: autenticidad total.",
+                imagen: "img/luffy.webp",
+                color: "#E63946"
+            },
+            Zoro: {
+                nombre: "Roronoa Zoro",
+                descripcion: "Eres disciplina, honor y determinación pura. No hablas más de lo necesario y tus acciones pesan más que tus palabras. Tienes un objetivo grabado a fuego y nada te desviará de él.",
+                imagen: "img/zoro.webp",
+                color: "#2D6A4F"
+            },
+            Nami: {
+                nombre: "Nami",
+                descripcion: "Eres inteligencia, pragmatismo y corazón bien escondido. Sabes leer a las personas mejor que nadie y usas esa habilidad para proteger lo que más te importa.",
+                imagen: "img/nami.webp",
+                color: "#F4A261"
+            },
+            Usopp: {
+                nombre: "Usopp",
+                descripcion: "Eres creatividad, corazón y una valentía que ni tú mismo reconoces. El miedo no te falta pero tampoco te detiene — y eso te hace más valiente que muchos.",
+                imagen: "img/usopp.webp",
+                color: "#6D4C3D"
+            },
+            Sanji: {
+                nombre: "Sanji",
+                descripcion: "Eres pasión, elegancia y dedicación absoluta. Todo lo que haces lo haces con estilo y con el corazón. Tu forma de cuidar a los demás es única y nadie puede igualarte en lo que te propones.",
+                imagen: "img/sanji.webp",
+                color: "#1A1A2E"
+            },
+            Chopper: {
+                nombre: "Tony Tony Chopper",
+                descripcion: "Eres ternura, bondad y una fortaleza interior que sorprende a todos. Tu compasión no tiene límites y darías todo por los que quieres sin pedir nada a cambio.",
+                imagen: "img/chopper.png",
+                color: "#E84393"
+            },
+            Robin: {
+                nombre: "Nico Robin",
+                descripcion: "Eres profundidad, inteligencia y una calma que esconde una historia enorme. Observas más de lo que hablas y cuando actúas, siempre es con una precisión que deja a todos sin palabras.",
+                imagen: "img/robin.webp",
+                color: "#6C3483"
+            },
+            Franky: {
+                nombre: "Franky",
+                descripcion: "Eres creatividad desbordante, energía inagotable y un corazón enorme. Construyes el futuro con tus propias manos y nunca dejas de creer que todo puede ser más SUPER.",
+                imagen: "img/franky.webp",
+                color: "#1A5276"
+            },
+            Brook: {
+                nombre: "Brook",
+                descripcion: "Eres elegancia, nostalgia y una alegría que nace de haber superado la oscuridad. Tu humor y tu música son tu forma de decirle al mundo que la vida, aunque difícil, merece ser celebrada.",
+                imagen: "img/brook.webp",
+                color: "#212F3C"
+            },
+            Jinbe: {
+                nombre: "Jinbe",
+                descripcion: "Eres sabiduría, calma y una lealtad inquebrantable. No actúas por impulso sino por convicción profunda. Cuando hablas, la gente escucha — porque cada palabra tuya tiene peso y verdad.",
+                imagen: "img/jinbe.webp",
+                color: "#1A3A5C"
+            }
+        };
+
+        let preguntaActual = 0;
+        let puntuaciones = { Luffy:0, Zoro:0, Nami:0, Usopp:0, Sanji:0, Chopper:0, Robin:0, Franky:0, Brook:0, Jinbe:0 };
+        let seleccionActual = null;
+
+        function renderPregunta() {
+            const p = preguntas[preguntaActual];
+            document.getElementById('questionText').textContent = p.texto;
+            document.getElementById('progressNum').textContent = (preguntaActual + 1) + ' / ' + preguntas.length;
+            document.getElementById('progressFill').style.width = ((preguntaActual + 1) / preguntas.length * 100) + '%';
+
+            const letras = ['A', 'B', 'C', 'D'];
+            const wrap = document.getElementById('optionsWrap');
+            wrap.innerHTML = '';
+            p.opciones.forEach((op, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `
+                    <div class="quiz-option-letter">${letras[i]}</div>
+                    <div class="quiz-option-text">${op.texto}</div>
+                `;
+                btn.onclick = () => seleccionar(btn, op.personaje);
+                wrap.appendChild(btn);
+            });
+            seleccionActual = null;
+        }
+
+        function seleccionar(btn, personaje) {
+            document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            seleccionActual = personaje;
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.classList.add('visible');
+            const esUltima = preguntaActual === preguntas.length - 1;
+            nextBtn.textContent = esUltima ? 'Ver mi resultado →' : 'Siguiente pregunta →';
+        }
+
+        function nextQuestion() {
+            if (!seleccionActual) return;
+            puntuaciones[seleccionActual]++;
+            preguntaActual++;
+            if (preguntaActual >= preguntas.length) {
+                mostrarResultado();
+            } else {
+                renderPregunta();
+            }
+        }
+
+        function mostrarResultado() {
+            const ganador = Object.keys(puntuaciones).reduce((a, b) => puntuaciones[a] > puntuaciones[b] ? a : b);
+            const res = resultados[ganador];
+            document.getElementById('resultName').textContent = res.nombre;
+            document.getElementById('resultDesc').textContent = res.descripcion;
+            document.getElementById('resultImg').src = res.imagen;
+            document.getElementById('resultImg').alt = res.nombre;
+            document.getElementById('resultBgColor').style.background = res.color;
+            document.getElementById('preguntaWrap').style.display = 'none';
+            document.getElementById('exitBtn').style.display = 'none';
+            document.querySelector('.quiz-chars-btn').style.display = 'none';
+            document.getElementById('progressNum').textContent = '✓ Completado';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('resultCard').classList.add('visible');
+        }
+
+        function restartQuiz() {
+            preguntaActual = 0;
+            puntuaciones = { Luffy:0, Zoro:0, Nami:0, Usopp:0, Sanji:0, Chopper:0, Robin:0, Franky:0, Brook:0, Jinbe:0 };
+            seleccionActual = null;
+            document.getElementById('preguntaWrap').style.display = 'block';
+            document.getElementById('exitBtn').style.display = 'flex';
+            document.querySelector('.quiz-chars-btn').style.display = 'flex';
+            document.getElementById('resultCard').classList.remove('visible');
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.style.display = '';
+            nextBtn.classList.remove('visible');
+            renderPregunta();
+        }
+
+        function abrirModal() { document.getElementById('exitModal').classList.add('visible'); }
+        function cerrarModal() { document.getElementById('exitModal').classList.remove('visible'); }
+        function abrirPersonajes() { document.getElementById('charsModal').classList.add('visible'); }
+        function cerrarPersonajes() { document.getElementById('charsModal').classList.remove('visible'); }
+
+        document.getElementById('exitModal').addEventListener('click', function(e) {
+            if (e.target === this) cerrarModal();
+        });
+        document.getElementById('charsModal').addEventListener('click', function(e) {
+            if (e.target === this) cerrarPersonajes();
+        });
+
+        renderPregunta();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #F7F5F0;
+            min-height: 100vh;
+        }
+
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            color: #fff;
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .qa-logo span { color: #F97316; }
+        .qa-search { flex: 1; max-width: 420px; position: relative; }
+        .qa-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 15px;
+            pointer-events: none;
+        }
+        .qa-search input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px 16px 10px 40px;
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(249,115,22,0.5);
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+        }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 99px;
+            transition: all 0.2s;
+        }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        .qa-cat-hero {
+            background: #0D0D0D;
+            padding: 48px 48px 56px;
+            position: relative;
+            overflow: hidden;
+        }
+        .qa-cat-hero::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 55%;
+            background: url('img/one-piece-bg.jpg') center/cover no-repeat;
+            opacity: 0.5;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.7) 50%, black 100%);
+            mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 25%, rgba(0,0,0,0.7) 50%, black 100%);
+        }
+        .qa-cat-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #ccc;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.12);
+            padding: 8px 16px;
+            border-radius: 99px;
+        }
+        .qa-cat-back:hover { background: rgba(255,255,255,0.18); color: #fff; }
+        .qa-cat-tag {
+            display: inline-block;
+            background: rgba(249,115,22,0.15);
+            color: #F97316;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 99px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(249,115,22,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-hero p {
+            color: #888;
+            font-size: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-cat-stats {
+            display: flex;
+            gap: 32px;
+            margin-top: 28px;
+            position: relative;
+            z-index: 1;
+        }
+        .qa-stat-item { display: flex; flex-direction: column; gap: 2px; }
+        .qa-stat-num {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+        .qa-stat-label { font-size: 12px; color: #666; }
+
+        .qa-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 48px 60px;
+        }
+        .qa-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .qa-card {
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s;
+            aspect-ratio: 21/6;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+        .qa-card:hover {
+            transform: scale(1.01);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        .qa-card-bg {
+            position: absolute; inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s;
+        }
+        .qa-card:hover .qa-card-bg { transform: scale(1.03); }
+        .qa-card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.1) 100%);
+        }
+        .qa-card-content {
+            position: relative;
+            padding: 28px 36px;
+            width: 60%;
+        }
+        .qa-card-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-bottom: 8px;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .qa-card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        .qa-card-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+        .qa-card-meta { display: flex; gap: 8px; align-items: center; }
+        .qa-card-pill {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 99px;
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.8);
+        }
+        .qa-card-pill.hot { background: rgba(249,115,22,0.25); color: #F97316; }
+        .qa-card-arrow {
+            position: absolute;
+            right: 36px;
+            bottom: 36px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            transition: all 0.2s;
+        }
+        .qa-card:hover .qa-card-arrow {
+            background: #F97316;
+            border-color: #F97316;
+            transform: translateX(4px);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="qa-header">
+        <div class="qa-logo" onclick="window.location.href='../inicio.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="../inicio.html">Inicio</a>
+            <a href="../categorias.html">Categorías</a>
+            <a href="#" class="active">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <div class="qa-cat-hero">
+        <a href="../categorias.html" class="qa-cat-back">← Volver a categorías</a>
+        <div class="qa-cat-tag">🎌 Anime</div>
+        <h1>Quizzes de Anime</h1>
+        <p>Descubre qué personaje, mundo o historia te define.</p>
+        <div class="qa-cat-stats">
+            <div class="qa-stat-item">
+                <span class="qa-stat-num">4</span>
+                <span class="qa-stat-label">Quizzes</span>
+            </div>
+            <div class="qa-stat-item">
+                <span class="qa-stat-num">  78</span>
+                <span class="qa-stat-label">Preguntas en total</span>
+            </div>
+            <div class="qa-stat-item">
+                <span class="qa-stat-num">3 min</span>
+                <span class="qa-stat-label">Por quiz</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="qa-section">
+        <div class="qa-grid">
+
+            <!-- ONE PIECE -->
+            <div class="qa-card" onclick="window.location.href='quiz-onepiece.html'">
+                <div class="qa-card-bg" style="background-image: url('img/one-piece-bg.jpg');"></div>
+                <div style="
+                    position: absolute;
+                    right: 0; top: 0; bottom: 0;
+                    width: 60%;
+                    background-image: url('img/one-piece.png');
+                    background-size: cover;
+                    background-position: center;
+                    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                "></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">⚔️ One Piece</span>
+                    <div class="qa-card-title">¿Qué personaje eres de One Piece?</div>
+                    <div class="qa-card-desc">Luffy, Zoro, Nami... descubre a qué tripulante del Sombrero de Paja te pareces más.</div>
+                    <div class="qa-card-meta">
+                        <span class="qa-card-pill">20 preguntas</span>
+                        <span class="qa-card-pill hot">🔥 Popular</span>
+                    </div>
+                </div>
+                <div class="qa-card-arrow">→</div>
+            </div>
+
+            <!-- MY HERO ACADEMIA -->
+            <div class="qa-card" onclick="window.location.href='quiz-mha.html'">
+                <div class="qa-card-bg" style="background-image: url('img/mha-bg.jpg');"></div>
+                <div style="
+                    position: absolute;
+                    right: 0; top: 0; bottom: 0;
+                    width: 60%;
+                    background-image: url('img/mha.png');
+                    background-size: cover;
+                    background-position: center;
+                    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                "></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">🌊 My Hero Academia</span>
+                    <div class="qa-card-title">¿Qué personaje eres de My Hero Academia?</div>
+                    <div class="qa-card-desc">¿Tienes el corazón de Deku o la determinación de Bakugo? Averígualo.</div>
+                    <div class="qa-card-meta">
+                        <span class="qa-card-pill">20 preguntas</span>
+                    </div>
+                </div>
+                <div class="qa-card-arrow">→</div>
+            </div>
+
+            <!-- KIMETSU NO YAIBA -->
+            <div class="qa-card" onclick="window.location.href='quiz-kimetsu.html'">
+                <div class="qa-card-bg" style="background-image: url('img/kimetsu-bg.jpg');"></div>
+                <div style="
+                    position: absolute;
+                    right: 0; top: 0; bottom: 0;
+                    width: 60%;
+                    background-image: url('img/kimetsu.webp');
+                    background-size: cover;
+                    background-position: center;
+                    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                "></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">🌙 Kimetsu no Yaiba</span>
+                    <div class="qa-card-title">¿Qué personaje eres de Kimetsu no Yaiba?</div>
+                    <div class="qa-card-desc">Entre cazadores y demonios, ¿qué personaje de Kimetsu no Yaiba llevas dentro?</div>
+                    <div class="qa-card-meta">
+                        <span class="qa-card-pill">20 preguntas</span>
+                        <span class="qa-card-pill hot">✨ Nuevo</span>
+                    </div>
+                </div>
+                <div class="qa-card-arrow">→</div>
+            </div>
+
+            <!-- NARUTO -->
+            <div class="qa-card" onclick="window.location.href='quiz-naruto.html'">
+                <div class="qa-card-bg" style="background-image: url('img/naruto-bg.jpg');"></div>
+                <div style="
+                    position: absolute;
+                    right: 0; top: 0; bottom: 0;
+                    width: 60%;
+                    background-image: url('img/naruto.png');
+                    background-size: cover;
+                    background-position: center;
+                    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                    mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 30%, black 100%);
+                "></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">👁️ Naruto</span>
+                    <div class="qa-card-title">¿A qué aldea perteneces de Naruto?</div>
+                    <div class="qa-card-desc">No todas las aldeas son iguales. ¿Eres leal como la Hoja, misterioso como la Niebla o poderoso como las Nubes?</div>
+                    <div class="qa-card-meta">
+                        <span class="qa-card-pill">18 preguntas</span>
+                    </div>
+                </div>
+                <div class="qa-card-arrow">→</div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
