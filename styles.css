@@ -250,7 +250,7 @@ body {
 /* GRID */
 .qa-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
@@ -260,7 +260,7 @@ body {
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.25s, box-shadow 0.25s;
-    aspect-ratio: 1;
+    aspect-ratio: 16/7;
     position: relative;
     display: flex;
     align-items: flex-end;

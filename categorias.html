@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorías - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #F7F5F0;
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo {
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            color: #fff;
+            letter-spacing: -0.5px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .qa-logo span { color: #F97316; }
+        .qa-search {
+            flex: 1;
+            max-width: 420px;
+            position: relative;
+        }
+        .qa-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 15px;
+            pointer-events: none;
+        }
+        .qa-search input {
+            width: 100%;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px 16px 10px 40px;
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.2s;
+        }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus {
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(249,115,22,0.5);
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+        }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a {
+            color: #aaa;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 99px;
+            transition: all 0.2s;
+        }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        /* PAGE HERO */
+        .qa-page-hero {
+            background: #0D0D0D;
+            padding: 48px 48px 56px;
+        }
+        .qa-page-hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 12px;
+        }
+        .qa-page-hero p { color: #888; font-size: 16px; }
+
+        /* GRID */
+        .qa-section {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 48px 60px;
+        }
+        .qa-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .qa-card {
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s;
+            aspect-ratio: 16/7;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+        }
+        .qa-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        .qa-card-bg {
+            position: absolute; inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s;
+        }
+        .qa-card:hover .qa-card-bg { transform: scale(1.06); }
+        .qa-card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+        }
+        .qa-card-content {
+            position: relative;
+            padding: 20px 24px;
+            width: 100%;
+        }
+        .qa-card-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+        .qa-card-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
+        .qa-card-count { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="qa-header">
+        <div class="qa-logo" onclick="window.location.href='inicio.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="inicio.html">Inicio</a>
+            <a href="categorias.html" class="active">Categorías</a>
+            <a href="#">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <!-- PAGE HERO -->
+    <div class="qa-page-hero">
+        <h1>Todas las categorías</h1>
+        <p>Elige una categoría y encuentra el quiz perfecto para ti.</p>
+    </div>
+
+    <!-- GRID DE CATEGORÍAS -->
+    <div class="qa-section">
+        <div class="qa-grid">
+
+            <div class="qa-card" onclick="window.location.href='CategoriasQuizz/anime.html'">
+                <div class="qa-card-bg" style="background-color:#F97316; background-image: url('https://i.blogs.es/7547c2/one-piece/840_560.jpeg');"></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">🎌 Anime</span>
+                    <div class="qa-card-title">Quizzes de Anime</div>
+                    <div class="qa-card-count">4 quizzes disponibles</div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="qa-card-bg" style="background-color:#3B82F6;"></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">🧠 Personalidad</span>
+                    <div class="qa-card-title">Quizzes de Personalidad</div>
+                    <div class="qa-card-count">Próximamente</div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="qa-card-bg" style="background-color:#10B981;"></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">🌍 Cultura</span>
+                    <div class="qa-card-title">Quizzes de Cultura</div>
+                    <div class="qa-card-count">Próximamente</div>
+                </div>
+            </div>
+
+            <div class="qa-card">
+                <div class="qa-card-bg" style="background-color:#FACC15;"></div>
+                <div class="qa-card-overlay"></div>
+                <div class="qa-card-content">
+                    <span class="qa-card-tag">🍕 Diversión</span>
+                    <div class="qa-card-title">Quizzes de Diversión</div>
+                    <div class="qa-card-count">Próximamente</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

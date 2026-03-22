@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="qa-header">
+
+    <div class="qa-logo" onclick="window.location.href='inicio.html'" style="cursor:pointer;">Quiz<span>App</span></div>
+
+    <div class="qa-search">
+        <span class="qa-search-icon">🔍</span>
+        <input type="text" placeholder="Buscar un quiz..." id="searchInput" autocomplete="off">
+        <div class="qa-dropdown" id="dropdown">
+            <div class="qa-dropdown-item">
+                <div class="qa-di-icon" style="background:#F973161A;">🎌</div>
+                <div class="qa-di-info">
+                    <div class="qa-di-title">¿Qué personaje de anime eres?</div>
+                    <div class="qa-di-tag">Anime · 12 preguntas</div>
+                </div>
+                <span class="qa-di-arrow">→</span>
+            </div>
+            <div class="qa-dropdown-item">
+                <div class="qa-di-icon" style="background:#3B82F61A;">🧠</div>
+                <div class="qa-di-info">
+                    <div class="qa-di-title">¿Qué tipo de líder eres?</div>
+                    <div class="qa-di-tag">Personalidad · 10 preguntas</div>
+                </div>
+                <span class="qa-di-arrow">→</span>
+            </div>
+            <div class="qa-dropdown-item">
+                <div class="qa-di-icon" style="background:#10B9811A;">🌍</div>
+                <div class="qa-di-info">
+                    <div class="qa-di-title">¿Cuánto sabes del mundo?</div>
+                    <div class="qa-di-tag">Cultura · 15 preguntas</div>
+                </div>
+                <span class="qa-di-arrow">→</span>
+            </div>
+            <div class="qa-dropdown-item">
+                <div class="qa-di-icon" style="background:#FACC151A;">🍕</div>
+                <div class="qa-di-info">
+                    <div class="qa-di-title">¿Qué comida eres tú?</div>
+                    <div class="qa-di-tag">Diversión · 8 preguntas</div>
+                </div>
+                <span class="qa-di-arrow">→</span>
+            </div>
+        </div>
+    </div>
+
+    <nav class="qa-nav">
+        <a href="inicio.html" class="active">Inicio</a>
+        <a href="categorias.html">Categorías</a>
+        <a href="#">Quizzes</a>
+        <a href="#">Top</a>
+    </nav>
+
+</header>
+
+<!-- HERO -->
+<div class="qa-hero">
+    <div class="qa-hero-text">
+        <div class="qa-badge">✦ Más de 50 quizzes disponibles</div>
+        <h1>Descubre qué tipo de <em>persona</em> eres</h1>
+        <p>Haz quizzes rápidos, divertidos y sorpréndete con los resultados.</p>
+        <button class="qa-cta" onclick="window.location.href='categorias.html'">Empezar ahora <span class="qa-cta-arrow">→</span></button>
+    </div>
+    <div class="qa-hero-img">🎯</div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
