@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué personaje eres de GTA? - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: #F7F5F0; min-height: 100vh; }
+
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: #fff; letter-spacing: -0.5px; flex-shrink: 0; cursor: pointer; }
+        .qa-logo span { color: #F97316; }
+        .qa-search { flex: 1; max-width: 420px; position: relative; }
+        .qa-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #888; font-size: 15px; pointer-events: none; }
+        .qa-search input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 16px 10px 40px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus { background: rgba(255,255,255,0.12); border-color: rgba(249,115,22,0.5); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 99px; transition: all 0.2s; }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        .quiz-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+        .quiz-progress-wrap { margin-bottom: 36px; }
+        .quiz-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .quiz-progress-label { font-size: 13px; color: #888; font-weight: 500; }
+        .quiz-progress-num { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #0D0D0D; }
+        .quiz-progress-bar { width: 100%; height: 6px; background: #E5E2DC; border-radius: 99px; overflow: hidden; }
+        .quiz-progress-fill { height: 100%; background: #F97316; border-radius: 99px; transition: width 0.4s ease; }
+
+        .quiz-action-row { display: flex; gap: 12px; margin-bottom: 36px; }
+        .quiz-exit-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        .quiz-exit-btn:hover { border-color: #E24B4A; color: #E24B4A; background: #FFF0F0; }
+        .quiz-chars-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        .quiz-chars-btn:hover { border-color: #F97316; color: #F97316; background: #FFF7F3; }
+
+        .quiz-question { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 32px; }
+
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .quiz-option { width: 100%; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: 'DM Sans', sans-serif; }
+        .quiz-option:hover { border-color: #F97316; transform: translateX(4px); }
+        .quiz-option.selected { border-color: #F97316; background: #FFF7F3; transform: translateX(4px); }
+        .quiz-option-letter { width: 32px; height: 32px; border-radius: 8px; background: #F7F5F0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #888; flex-shrink: 0; transition: all 0.2s; }
+        .quiz-option.selected .quiz-option-letter { background: #F97316; color: #fff; }
+        .quiz-option-text { font-size: 15px; color: #0D0D0D; line-height: 1.4; }
+
+        .quiz-next { margin-top: 28px; width: 100%; background: #0D0D0D; color: #fff; border: none; border-radius: 14px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: none; }
+        .quiz-next:hover { background: #F97316; }
+        .quiz-next.visible { display: block; }
+
+        .exit-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .exit-modal-overlay.visible { display: flex; }
+        .exit-modal { background: #fff; border-radius: 24px; padding: 40px 36px; max-width: 420px; width: 90%; text-align: center; }
+        .exit-modal-icon { width: 56px; height: 56px; background: #FFF0F0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+        .exit-modal h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .exit-modal p { font-size: 15px; color: #888; line-height: 1.6; margin-bottom: 28px; }
+        .exit-modal-btns { display: flex; gap: 10px; }
+        .exit-modal-stay { flex: 1; background: #F7F5F0; color: #0D0D0D; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .exit-modal-stay:hover { background: #EDEAE4; }
+        .exit-modal-leave { flex: 1; background: #E24B4A; color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .exit-modal-leave:hover { background: #C0392B; }
+
+        .chars-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+        .chars-modal-overlay.visible { display: flex; }
+        .chars-modal { background: #0D0D0D; border-radius: 24px; padding: 40px; max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .chars-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .chars-modal-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .chars-modal-title span { color: #F97316; }
+        .chars-modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .chars-modal-close:hover { background: rgba(255,255,255,0.2); }
+        .chars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .char-card { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 3/4; display: flex; align-items: flex-end; }
+        .char-card-bg { position: absolute; inset: 0; z-index: 0; }
+        .char-card-img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+        .char-card-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%); }
+        .char-card-name { position: relative; z-index: 3; padding: 12px; font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
+
+        .result-card { display: none; border-radius: 24px; overflow: hidden; position: relative; min-height: 420px; }
+        .result-card.visible { display: flex; }
+        .result-card-bg-color { position: absolute; inset: 0; z-index: 0; }
+        .result-card-left { position: relative; z-index: 1; flex: 1; padding: 40px 36px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.75) 70%, rgba(0,0,0,0) 100%); }
+        .result-card-tag { display: inline-block; background: rgba(249,115,22,0.25); color: #F97316; font-size: 12px; font-weight: 500; padding: 4px 14px; border-radius: 99px; margin-bottom: 14px; border: 1px solid rgba(249,115,22,0.4); width: fit-content; }
+        .result-card-eres { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 4px; font-weight: 500; }
+        .result-card-name { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1; margin-bottom: 16px; }
+        .result-card-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 28px; max-width: 340px; }
+        .result-card-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .result-btn-retry { background: #F97316; color: #fff; border: none; border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-retry:hover { background: #EA6B0A; transform: translateY(-1px); }
+        .result-btn-back { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-back:hover { background: rgba(255,255,255,0.18); }
+        .result-card-right { position: relative; z-index: 1; width: 280px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+        .result-card-right img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 0 20px rgba(0,0,0,0.4)); }
+    </style>
+</head>
+<body>
+
+    <header class="qa-header" id="mainHeader">
+        <div class="qa-logo" onclick="window.location.href='../inicio.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="../inicio.html">Inicio</a>
+            <a href="../categorias.html">Categorías</a>
+            <a href="#">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <div class="quiz-wrap" id="quizWrap">
+        <div class="quiz-progress-wrap">
+            <div class="quiz-progress-top">
+                <span class="quiz-progress-label">GTA V · ¿Qué personaje eres?</span>
+                <span class="quiz-progress-num" id="progressNum">1 / 15</span>
+            </div>
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" id="progressFill" style="width: 6.66%;"></div>
+            </div>
+        </div>
+
+        <div class="quiz-action-row">
+            <button class="quiz-chars-btn" onclick="abrirPersonajes()">🚗 Personajes disponibles</button>
+            <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
+        </div>
+
+        <div id="preguntaWrap">
+            <div class="quiz-question" id="questionText"></div>
+            <div class="quiz-options" id="optionsWrap"></div>
+            <button class="quiz-next" id="nextBtn" onclick="nextQuestion()">Siguiente pregunta →</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-card-bg-color" id="resultBgColor"></div>
+            <div class="result-card-left">
+                <div class="result-card-tag">🚗 GTA V</div>
+                <div class="result-card-eres">Eres...</div>
+                <div class="result-card-name" id="resultName"></div>
+                <div class="result-card-desc" id="resultDesc"></div>
+                <div class="result-card-btns">
+                    <button class="result-btn-retry" onclick="restartQuiz()">Repetir quiz</button>
+                    <button class="result-btn-back" onclick="window.location.href='videojuegos.html'">Volver a Videojuegos</button>
+                </div>
+            </div>
+            <div class="result-card-right">
+                <img id="resultImg" src="" alt="Personaje">
+            </div>
+        </div>
+
+    </div>
+
+    <div class="exit-modal-overlay" id="exitModal">
+        <div class="exit-modal">
+            <div class="exit-modal-icon">⚠️</div>
+            <h2>¿Seguro que quieres salir?</h2>
+            <p>Si sales ahora perderás todo tu progreso y tus respuestas no se guardarán.</p>
+            <div class="exit-modal-btns">
+                <button class="exit-modal-stay" onclick="cerrarModal()">Quedarse</button>
+                <button class="exit-modal-leave" onclick="window.location.href='videojuegos.html'">✕ Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chars-modal-overlay" id="charsModal">
+        <div class="chars-modal">
+            <div class="chars-modal-header">
+                <div class="chars-modal-title">Personajes <span>disponibles</span></div>
+                <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
+            </div>
+            <div class="chars-grid">
+                <div class="char-card">
+                    <div class="char-card-bg" style="background:#1565C0;"></div>
+                    <img class="char-card-img" src="img/michael.webp" alt="Michael">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Michael De Santa</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background:#6A1B1B;"></div>
+                    <img class="char-card-img" src="img/trevor.webp" alt="Trevor">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Trevor Philips</div>
+                </div>
+                <div class="char-card">
+                    <div class="char-card-bg" style="background:#1B5E20;"></div>
+                    <img class="char-card-img" src="img/franklin.webp" alt="Franklin">
+                    <div class="char-card-overlay"></div>
+                    <div class="char-card-name">Franklin Clinton</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = [
+            {
+                texto: "¿Cómo describirías tu vida en este momento?",
+                opciones: [
+                    { texto: "Tengo todo lo que quería pero no soy feliz con ello.", personaje: "Michael" },
+                    { texto: "Vivo al límite, sin reglas ni ataduras de ningún tipo.", personaje: "Trevor" },
+                    { texto: "Busco salir de donde estoy y llegar a algo mejor.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu relación con el dinero?",
+                opciones: [
+                    { texto: "Lo tengo pero nunca es suficiente para llenar el vacío.", personaje: "Michael" },
+                    { texto: "Es un medio para seguir haciendo lo que quiero.", personaje: "Trevor" },
+                    { texto: "Es mi objetivo principal, quiero salir de la pobreza.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cómo reaccionas cuando alguien te traiciona?",
+                opciones: [
+                    { texto: "Lo proceso internamente y guardo rencor durante años.", personaje: "Michael" },
+                    { texto: "Exploto de inmediato y las consecuencias son impredecibles.", personaje: "Trevor" },
+                    { texto: "Me lo tomo con calma pero no lo olvido nunca.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu estilo para resolver problemas?",
+                opciones: [
+                    { texto: "Planifico con cuidado y busco la opción más inteligente.", personaje: "Michael" },
+                    { texto: "Actúo de forma caótica y resuelvo sobre la marcha.", personaje: "Trevor" },
+                    { texto: "Soy directo y práctico, busco la solución más eficiente.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Qué es lo que más valoras en tu vida?",
+                opciones: [
+                    { texto: "Mi familia aunque la relación sea complicada.", personaje: "Michael" },
+                    { texto: "Mi libertad absoluta sin que nadie me controle.", personaje: "Trevor" },
+                    { texto: "La lealtad de mis amigos y salir adelante juntos.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cómo eres en situaciones de presión extrema?",
+                opciones: [
+                    { texto: "Me mantengo relativamente calmado aunque por dentro explote.", personaje: "Michael" },
+                    { texto: "La presión me activa y saco lo peor y lo mejor de mí.", personaje: "Trevor" },
+                    { texto: "Me centro y ejecuto con precisión lo que tengo que hacer.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor defecto?",
+                opciones: [
+                    { texto: "Soy egocéntrico y a veces pongo mis intereses por encima de todo.", personaje: "Michael" },
+                    { texto: "Soy completamente impredecible y eso me mete en muchos problemas.", personaje: "Trevor" },
+                    { texto: "A veces soy demasiado ambicioso y confío en personas equivocadas.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu pasado?",
+                opciones: [
+                    { texto: "Lleno de errores que intenté enterrar pero que siempre vuelven.", personaje: "Michael" },
+                    { texto: "Oscuro y caótico, y no lo cambiaría por nada.", personaje: "Trevor" },
+                    { texto: "Difícil, pero me ha hecho ser quien soy hoy.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cómo te relacionas con la autoridad?",
+                opciones: [
+                    { texto: "La evito pero sé cómo manejarla cuando es necesario.", personaje: "Michael" },
+                    { texto: "La ignoro completamente, nadie me dice lo que tengo que hacer.", personaje: "Trevor" },
+                    { texto: "Intento no meterse con ella aunque a veces no hay opción.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Qué harías con una gran suma de dinero?",
+                opciones: [
+                    { texto: "Intentaría tener la vida perfecta que siempre soñé.", personaje: "Michael" },
+                    { texto: "Lo gastaría sin pensar en lo que me diera la gana.", personaje: "Trevor" },
+                    { texto: "Invertiría y me aseguraría de que nunca más faltara nada.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cómo es tu círculo social?",
+                opciones: [
+                    { texto: "Pequeño y complicado, con personas que no siempre me entienden.", personaje: "Michael" },
+                    { texto: "Caótico y peligroso, pero nunca aburrido.", personaje: "Trevor" },
+                    { texto: "Leal pero a veces me arrastra a situaciones que no quiero.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu actitud ante el riesgo?",
+                opciones: [
+                    { texto: "Calculo los riesgos antes de actuar aunque a veces falle.", personaje: "Michael" },
+                    { texto: "El riesgo me emociona, cuanto mayor mejor.", personaje: "Trevor" },
+                    { texto: "Asumo riesgos calculados cuando la recompensa lo vale.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Cómo te ves a ti mismo?",
+                opciones: [
+                    { texto: "Como alguien que tomó malas decisiones pero no es del todo malo.", personaje: "Michael" },
+                    { texto: "Como alguien libre que no debe nada a nadie.", personaje: "Trevor" },
+                    { texto: "Como alguien con potencial que todavía no ha llegado a su techo.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Qué tipo de líder eres?",
+                opciones: [
+                    { texto: "Estratégico, pienso antes de actuar y guío con experiencia.", personaje: "Michael" },
+                    { texto: "Dominante y caótico, los demás me siguen por miedo o respeto.", personaje: "Trevor" },
+                    { texto: "Natural, la gente me sigue porque confía en mí.", personaje: "Franklin" }
+                ]
+            },
+            {
+                texto: "¿Qué frase resume mejor tu filosofía de vida?",
+                opciones: [
+                    { texto: "El sueño americano existe, solo que nadie te dijo que tendría este precio.", personaje: "Michael" },
+                    { texto: "Las reglas son para la gente que no tiene el valor de romperlas.", personaje: "Trevor" },
+                    { texto: "Vengo de abajo y eso me hace más hambriento que cualquiera.", personaje: "Franklin" }
+                ]
+            }
+        ];
+
+        const resultados = {
+            Michael: {
+                nombre: "Michael De Santa",
+                descripcion: "Eres inteligente, estratégico y cargas con el peso de tus decisiones pasadas. Tienes todo lo que siempre quisiste pero algo sigue faltando. Eres capaz de planificar con precisión y actuar con frialdad cuando hace falta — pero en el fondo buscas algo que el dinero no puede comprarte.",
+                imagen: "img/michael.webp",
+                color: "#1565C0"
+            },
+            Trevor: {
+                nombre: "Trevor Philips",
+                descripcion: "Eres caótico, impredecible y absolutamente libre. No te rigen las normas de los demás y actúas movido por impulsos que pocos comprenden. Puedes parecer destructivo pero tienes tu propio código — y quien se gana tu lealtad tiene un aliado sin igual.",
+                imagen: "img/trevor.webp",
+                color: "#6A1B1B"
+            },
+            Franklin: {
+                nombre: "Franklin Clinton",
+                descripcion: "Eres ambicioso, leal y tienes hambre de superarte. Vienes de abajo y eso te da una determinación que pocos pueden igualar. Sabes cuándo actuar y cuándo esperar, y tu talento natural para liderar hace que la gente confíe en ti de forma instintiva.",
+                imagen: "img/franklin.webp",
+                color: "#1B5E20"
+            }
+        };
+
+        let preguntaActual = 0;
+        let puntuaciones = { Michael:0, Trevor:0, Franklin:0 };
+        let seleccionActual = null;
+
+        function renderPregunta() {
+            const p = preguntas[preguntaActual];
+            document.getElementById('questionText').textContent = p.texto;
+            document.getElementById('progressNum').textContent = (preguntaActual + 1) + ' / ' + preguntas.length;
+            document.getElementById('progressFill').style.width = ((preguntaActual + 1) / preguntas.length * 100) + '%';
+            const letras = ['A', 'B', 'C'];
+            const wrap = document.getElementById('optionsWrap');
+            wrap.innerHTML = '';
+            p.opciones.forEach((op, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<div class="quiz-option-letter">${letras[i]}</div><div class="quiz-option-text">${op.texto}</div>`;
+                btn.onclick = () => seleccionar(btn, op.personaje);
+                wrap.appendChild(btn);
+            });
+            seleccionActual = null;
+        }
+
+        function seleccionar(btn, personaje) {
+            document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            seleccionActual = personaje;
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.classList.add('visible');
+            const esUltima = preguntaActual === preguntas.length - 1;
+            nextBtn.textContent = esUltima ? 'Ver mi resultado →' : 'Siguiente pregunta →';
+        }
+
+        function nextQuestion() {
+            if (!seleccionActual) return;
+            puntuaciones[seleccionActual]++;
+            preguntaActual++;
+            if (preguntaActual >= preguntas.length) {
+                mostrarResultado();
+            } else {
+                renderPregunta();
+            }
+        }
+
+        function mostrarResultado() {
+            const ganador = Object.keys(puntuaciones).reduce((a, b) => puntuaciones[a] > puntuaciones[b] ? a : b);
+            const res = resultados[ganador];
+            document.getElementById('resultName').textContent = res.nombre;
+            document.getElementById('resultDesc').textContent = res.descripcion;
+            document.getElementById('resultImg').src = res.imagen;
+            document.getElementById('resultImg').alt = res.nombre;
+            document.getElementById('resultBgColor').style.background = res.color;
+            document.getElementById('preguntaWrap').style.display = 'none';
+            document.getElementById('exitBtn').style.display = 'none';
+            document.querySelector('.quiz-chars-btn').style.display = 'none';
+            document.getElementById('progressNum').textContent = '✓ Completado';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('resultCard').classList.add('visible');
+        }
+
+        function restartQuiz() {
+            preguntaActual = 0;
+            puntuaciones = { Michael:0, Trevor:0, Franklin:0 };
+            seleccionActual = null;
+            document.getElementById('preguntaWrap').style.display = 'block';
+            document.getElementById('exitBtn').style.display = 'flex';
+            document.querySelector('.quiz-chars-btn').style.display = 'flex';
+            document.getElementById('resultCard').classList.remove('visible');
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.style.display = '';
+            nextBtn.classList.remove('visible');
+            renderPregunta();
+        }
+
+        function abrirModal() { document.getElementById('exitModal').classList.add('visible'); }
+        function cerrarModal() { document.getElementById('exitModal').classList.remove('visible'); }
+        function abrirPersonajes() { document.getElementById('charsModal').classList.add('visible'); }
+        function cerrarPersonajes() { document.getElementById('charsModal').classList.remove('visible'); }
+
+        document.getElementById('exitModal').addEventListener('click', function(e) { if (e.target === this) cerrarModal(); });
+        document.getElementById('charsModal').addEventListener('click', function(e) { if (e.target === this) cerrarPersonajes(); });
+
+        renderPregunta();
+    </script>
+
+</body>
+</html>
