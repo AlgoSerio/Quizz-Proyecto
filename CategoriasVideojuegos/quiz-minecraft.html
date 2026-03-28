@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¿A qué aldea perteneces de Naruto? - QuizApp</title>
+    <title>¿Qué mob eres de Minecraft? - QuizApp</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -82,41 +82,28 @@
         .chars-modal-title span { color: #F97316; }
         .chars-modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
         .chars-modal-close:hover { background: rgba(255,255,255,0.2); }
-
-        .chars-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-        .char-card { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 16/9; display: flex; align-items: flex-end; }
-        .char-card-bg { position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center; }
+        .chars-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .char-card { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 3/4; display: flex; align-items: flex-end; }
+        .char-card-bg { position: absolute; inset: 0; z-index: 0; }
+        .char-card-img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
         .char-card-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%); }
-        .char-card-name { position: relative; z-index: 3; padding: 16px; font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: #fff; line-height: 1.2; }
-        .char-card-sub { font-size: 11px; color: rgba(255,255,255,0.6); font-family: 'DM Sans', sans-serif; font-weight: 400; margin-top: 2px; }
+        .char-card-name { position: relative; z-index: 3; padding: 12px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #fff; line-height: 1.2; }
 
-        /* RESULTADO */
         .result-card { display: none; border-radius: 24px; overflow: hidden; position: relative; min-height: 420px; }
-        .result-card.visible { display: block; }
-        .result-card-bg-color {
-            position: absolute; inset: 0; z-index: 0;
-            background-size: cover; background-position: center;
-            filter: brightness(0.4);
-        }
-        .result-card-overlay {
-            position: absolute; inset: 0; z-index: 1;
-            background: linear-gradient(to right, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.1) 100%);
-        }
-        .result-card-left {
-            position: relative; z-index: 2;
-            padding: 40px 36px;
-            display: flex; flex-direction: column; justify-content: center;
-            min-height: 420px;
-        }
+        .result-card.visible { display: flex; }
+        .result-card-bg-color { position: absolute; inset: 0; z-index: 0; }
+        .result-card-left { position: relative; z-index: 1; flex: 1; padding: 40px 36px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.75) 70%, rgba(0,0,0,0) 100%); }
         .result-card-tag { display: inline-block; background: rgba(249,115,22,0.25); color: #F97316; font-size: 12px; font-weight: 500; padding: 4px 14px; border-radius: 99px; margin-bottom: 14px; border: 1px solid rgba(249,115,22,0.4); width: fit-content; }
         .result-card-eres { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 4px; font-weight: 500; }
         .result-card-name { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1; margin-bottom: 16px; }
-        .result-card-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 28px; max-width: 500px; }
+        .result-card-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 28px; max-width: 340px; }
         .result-card-btns { display: flex; gap: 10px; flex-wrap: wrap; }
         .result-btn-retry { background: #F97316; color: #fff; border: none; border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
         .result-btn-retry:hover { background: #EA6B0A; transform: translateY(-1px); }
         .result-btn-back { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
         .result-btn-back:hover { background: rgba(255,255,255,0.18); }
+        .result-card-right { position: relative; z-index: 1; width: 280px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+        .result-card-right img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 0 20px rgba(0,0,0,0.4)); }
     </style>
 </head>
 <body>
@@ -136,19 +123,18 @@
     </header>
 
     <div class="quiz-wrap" id="quizWrap">
-
         <div class="quiz-progress-wrap">
             <div class="quiz-progress-top">
-                <span class="quiz-progress-label">Naruto · ¿A qué aldea perteneces?</span>
-                <span class="quiz-progress-num" id="progressNum">1 / 18</span>
+                <span class="quiz-progress-label">Minecraft · ¿Qué mob eres?</span>
+                <span class="quiz-progress-num" id="progressNum">1 / 16</span>
             </div>
             <div class="quiz-progress-bar">
-                <div class="quiz-progress-fill" id="progressFill" style="width: 5.5%;"></div>
+                <div class="quiz-progress-fill" id="progressFill" style="width: 6.25%;"></div>
             </div>
         </div>
 
         <div class="quiz-action-row">
-            <button class="quiz-chars-btn" onclick="abrirPersonajes()">🏯 Aldeas disponibles</button>
+            <button class="quiz-chars-btn" onclick="abrirPersonajes()">🎮 Mobs disponibles</button>
             <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
         </div>
 
@@ -160,16 +146,18 @@
 
         <div class="result-card" id="resultCard">
             <div class="result-card-bg-color" id="resultBgColor"></div>
-            <div class="result-card-overlay"></div>
             <div class="result-card-left">
-                <div class="result-card-tag">👁️ Naruto</div>
-                <div class="result-card-eres">Tu aldea es...</div>
+                <div class="result-card-tag">⛏️ Minecraft</div>
+                <div class="result-card-eres">Eres...</div>
                 <div class="result-card-name" id="resultName"></div>
                 <div class="result-card-desc" id="resultDesc"></div>
                 <div class="result-card-btns">
                     <button class="result-btn-retry" onclick="restartQuiz()">Repetir quiz</button>
-                    <button class="result-btn-back" onclick="window.location.href='anime.html'">Volver a Anime</button>
+                    <button class="result-btn-back" onclick="window.location.href='videojuegos.html'">Volver a Videojuegos</button>
                 </div>
+            </div>
+            <div class="result-card-right">
+                <img id="resultImg" src="" alt="Mob">
             </div>
         </div>
 
@@ -182,7 +170,7 @@
             <p>Si sales ahora perderás todo tu progreso y tus respuestas no se guardarán.</p>
             <div class="exit-modal-btns">
                 <button class="exit-modal-stay" onclick="cerrarModal()">Quedarse</button>
-                <button class="exit-modal-leave" onclick="window.location.href='anime.html'">✕ Salir</button>
+                <button class="exit-modal-leave" onclick="window.location.href='videojuegos.html'">✕ Salir</button>
             </div>
         </div>
     </div>
@@ -190,40 +178,18 @@
     <div class="chars-modal-overlay" id="charsModal">
         <div class="chars-modal">
             <div class="chars-modal-header">
-                <div class="chars-modal-title">Aldeas <span>disponibles</span></div>
+                <div class="chars-modal-title">Mobs <span>disponibles</span></div>
                 <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
             </div>
             <div class="chars-grid">
-                <div class="char-card">
-                    <div class="char-card-bg" style="background-image: url('img/konoha.webp'); background-color: #2E7D32;"></div>
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Konoha<div class="char-card-sub">Aldea Oculta de la Hoja</div></div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background-image: url('img/suna.webp'); background-color: #E65100;"></div>
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Sunagakure<div class="char-card-sub">Aldea Oculta de la Arena</div></div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background-image: url('img/kiri.webp'); background-color: #1565C0;"></div>
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Kirigakure<div class="char-card-sub">Aldea Oculta de la Niebla</div></div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background-image: url('img/kumo.webp'); background-color: #4527A0;"></div>
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Kumogakure<div class="char-card-sub">Aldea Oculta de las Nubes</div></div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background-image: url('img/iwa.webp'); background-color: #4E342E;"></div>
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Iwagakure<div class="char-card-sub">Aldea Oculta de la Roca</div></div>
-                </div>
-                <div class="char-card">
-                    <div class="char-card-bg" style="background-image: url('img/oto.webp'); background-color: #212121;"></div>
-                    <div class="char-card-overlay"></div>
-                    <div class="char-card-name">Otogakure<div class="char-card-sub">Aldea Oculta del Sonido</div></div>
-                </div>
+                <div class="char-card"><div class="char-card-bg" style="background:#2D5A1B;"></div><img class="char-card-img" src="img/creeper.webp" alt="Creeper"><div class="char-card-overlay"></div><div class="char-card-name">Creeper</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#1A1A2E;"></div><img class="char-card-img" src="img/enderman.webp" alt="Enderman"><div class="char-card-overlay"></div><div class="char-card-name">Enderman</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#4A4A4A;"></div><img class="char-card-img" src="img/zombie.webp" alt="Zombie"><div class="char-card-overlay"></div><div class="char-card-name">Zombie</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#E0E0E0;"></div><img class="char-card-img" src="img/esqueleto.webp" alt="Esqueleto"><div class="char-card-overlay"></div><div class="char-card-name">Esqueleto</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#2C2C2C;"></div><img class="char-card-img" src="img/esqueleto-wither.webp" alt="Esqueleto Wither"><div class="char-card-overlay"></div><div class="char-card-name">Esqueleto Wither</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#8B6914;"></div><img class="char-card-img" src="img/aldeano.png" alt="Aldeano"><div class="char-card-overlay"></div><div class="char-card-name">Aldeano</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#6D4C41;"></div><img class="char-card-img" src="img/lobo.png" alt="Lobo"><div class="char-card-overlay"></div><div class="char-card-name">Lobo</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#1A1A1A;"></div><img class="char-card-img" src="img/wither.png" alt="Wither"><div class="char-card-overlay"></div><div class="char-card-name">Wither</div></div>
             </div>
         </div>
     </div>
@@ -231,210 +197,204 @@
     <script>
         const preguntas = [
             {
-                texto: "¿Cuál es tu mayor valor en la vida?",
+                texto: "¿Cómo reaccionas cuando alguien se acerca demasiado a ti?",
                 opciones: [
-                    { texto: "La lealtad a mis compañeros y nunca abandonar a nadie.", aldea: "Konoha" },
-                    { texto: "La resistencia y adaptarse a cualquier adversidad.", aldea: "Suna" },
-                    { texto: "La fuerza y el dominio sobre los demás.", aldea: "Kiri" },
-                    { texto: "El poder y la velocidad para superar cualquier obstáculo.", aldea: "Kumo" }
+                    { texto: "Me pongo nervioso y exploto sin querer.", mob: "Creeper" },
+                    { texto: "Me alejo en silencio y los observo desde lejos.", mob: "Enderman" },
+                    { texto: "Me aproximo lentamente sin pensarlo demasiado.", mob: "Zombie" },
+                    { texto: "Los apunto desde la distancia antes de que lleguen.", mob: "Esqueleto" }
                 ]
             },
             {
-                texto: "¿Cómo describes tu entorno ideal para vivir?",
+                texto: "¿Cuál es tu mayor debilidad?",
                 opciones: [
-                    { texto: "Un lugar cálido y lleno de vida rodeado de naturaleza.", aldea: "Konoha" },
-                    { texto: "Un desierto vasto donde solo los más fuertes sobreviven.", aldea: "Suna" },
-                    { texto: "Un lugar envuelto en niebla donde los secretos se guardan bien.", aldea: "Kiri" },
-                    { texto: "Las alturas, entre nubes y tormentas que dan poder.", aldea: "Kumo" }
+                    { texto: "El agua, me desintegra completamente.", mob: "Creeper" },
+                    { texto: "Que me miren directamente a los ojos.", mob: "Enderman" },
+                    { texto: "La luz del sol, me destruye poco a poco.", mob: "Zombie" },
+                    { texto: "Soy torpe de cerca, necesito distancia para ser efectivo.", mob: "Esqueleto" }
                 ]
             },
             {
-                texto: "¿Cómo afrontas un conflicto?",
+                texto: "¿Cómo describirías tu personalidad?",
                 opciones: [
-                    { texto: "Buscando el diálogo primero pero sin dudar en pelear si es necesario.", aldea: "Konoha" },
-                    { texto: "Con paciencia y estrategia, esperando el momento exacto.", aldea: "Suna" },
-                    { texto: "Con frialdad y contundencia, sin dejar margen al error.", aldea: "Kiri" },
-                    { texto: "De frente y con toda la fuerza disponible.", aldea: "Kumo" }
+                    { texto: "Explosivo e impredecible, nunca sabes cuándo voy a estallar.", mob: "Creeper" },
+                    { texto: "Misterioso y solitario, prefiero la oscuridad.", mob: "Enderman" },
+                    { texto: "Persistente y directo, voy a por lo que quiero sin parar.", mob: "Zombie" },
+                    { texto: "Preciso y calculador, espero el momento exacto.", mob: "Esqueleto" }
                 ]
             },
             {
-                texto: "¿Qué elemento te representa mejor?",
+                texto: "¿Qué harías si alguien te ataca?",
                 opciones: [
-                    { texto: "El fuego, cálido y protector pero devastador si se descontrola.", aldea: "Konoha" },
-                    { texto: "La tierra, sólida, resistente e inamovible.", aldea: "Iwa" },
-                    { texto: "El agua, que fluye en silencio pero puede arrasar con todo.", aldea: "Kiri" },
-                    { texto: "El rayo, veloz, impredecible y lleno de poder.", aldea: "Kumo" }
+                    { texto: "Me abalanzo sobre él aunque eso me destruya también.", mob: "Creeper" },
+                    { texto: "Me teletransporto y contraataco desde un ángulo inesperado.", mob: "Enderman" },
+                    { texto: "Sigo avanzando sin importarme el daño que recibo.", mob: "Zombie" },
+                    { texto: "Mantengo la distancia y lanzo proyectiles sin parar.", mob: "Esqueleto" }
                 ]
             },
             {
-                texto: "¿Cómo ves a los que son diferentes a ti?",
+                texto: "¿Cuál es tu hábitat ideal?",
                 opciones: [
-                    { texto: "Con curiosidad y apertura, la diversidad enriquece.", aldea: "Konoha" },
-                    { texto: "Con cautela, no confío fácilmente en los extraños.", aldea: "Suna" },
-                    { texto: "Con desconfianza, en mi mundo la diferencia puede ser peligrosa.", aldea: "Kiri" },
-                    { texto: "Como rivales potenciales a los que superar.", aldea: "Kumo" }
+                    { texto: "Cualquier lugar, aparezco donde menos te lo esperas.", mob: "Creeper" },
+                    { texto: "El End, un lugar oscuro y tranquilo lejos de todo.", mob: "Enderman" },
+                    { texto: "Las aldeas de noche, donde hay muchos objetivos cercanos.", mob: "Zombie" },
+                    { texto: "Cuevas y mazmorras donde puedo acechar desde las sombras.", mob: "Esqueleto" }
                 ]
             },
             {
-                texto: "¿Cuál es tu actitud ante el poder?",
+                texto: "¿Cómo te llevas con los demás?",
                 opciones: [
-                    { texto: "Es una responsabilidad para proteger a los demás.", aldea: "Konoha" },
-                    { texto: "Es necesario para sobrevivir en un mundo hostil.", aldea: "Suna" },
-                    { texto: "Es la única moneda que vale en este mundo.", aldea: "Kiri" },
-                    { texto: "Es algo que se conquista y se demuestra constantemente.", aldea: "Kumo" }
+                    { texto: "Soy un solitario, cuando me junto con otros es para el caos.", mob: "Creeper" },
+                    { texto: "Prefiero estar solo, no me gustan las multitudes.", mob: "Enderman" },
+                    { texto: "Me muevo en hordas, hay fuerza en los números.", mob: "Zombie" },
+                    { texto: "Trabajo bien en equipo cuando la situación lo requiere.", mob: "Aldeano" }
                 ]
             },
             {
-                texto: "¿Cómo describes tu forma de liderar?",
+                texto: "¿Qué valoras más en la vida?",
                 opciones: [
-                    { texto: "Inspirando a los demás con el ejemplo y el corazón.", aldea: "Konoha" },
-                    { texto: "Con frialdad y precisión, las emociones no tienen lugar.", aldea: "Suna" },
-                    { texto: "Con autoridad absoluta que nadie puede cuestionar.", aldea: "Kiri" },
-                    { texto: "Con fuerza y velocidad que dejan sin opciones al rival.", aldea: "Kumo" }
+                    { texto: "La tranquilidad, aunque a veces la rompa sin querer.", mob: "Creeper" },
+                    { texto: "Mi espacio personal y que nadie me moleste.", mob: "Enderman" },
+                    { texto: "La comunidad y el comercio con los demás.", mob: "Aldeano" },
+                    { texto: "La lealtad hacia quien me cuida y me protege.", mob: "Lobo" }
                 ]
             },
             {
-                texto: "¿Qué harías si tuvieras que elegir entre la misión y un compañero?",
+                texto: "¿Cómo reaccionas ante el peligro?",
                 opciones: [
-                    { texto: "Elegiría al compañero, siempre. Los nakama son primero.", aldea: "Konoha" },
-                    { texto: "La misión, el deber está por encima de los sentimientos.", aldea: "Suna" },
-                    { texto: "Dependería del valor estratégico de cada opción.", aldea: "Kiri" },
-                    { texto: "Buscaría la forma de completar ambas sin comprometer ninguna.", aldea: "Kumo" }
+                    { texto: "Me congelo y luego exploto de golpe.", mob: "Creeper" },
+                    { texto: "Huyo o me teletransporto para evitar el conflicto.", mob: "Enderman" },
+                    { texto: "Avanzo sin miedo, nada me detiene.", mob: "Zombie" },
+                    { texto: "Destruyo todo a mi alrededor sin distinción.", mob: "Wither" }
                 ]
             },
             {
-                texto: "¿Cuál es tu mayor fortaleza como ninja?",
+                texto: "¿Cuál es tu mayor fortaleza?",
                 opciones: [
-                    { texto: "La adaptabilidad y el trabajo en equipo.", aldea: "Konoha" },
-                    { texto: "La resistencia y el control del chakra en condiciones extremas.", aldea: "Suna" },
-                    { texto: "La capacidad de operar en la oscuridad sin ser detectado.", aldea: "Kiri" },
-                    { texto: "La velocidad y el poder de ataque directo.", aldea: "Kumo" }
+                    { texto: "El factor sorpresa, nadie me ve venir hasta que es tarde.", mob: "Creeper" },
+                    { texto: "Mi capacidad de moverme de forma impredecible.", mob: "Enderman" },
+                    { texto: "Mi resistencia, aguanto más que nadie.", mob: "Zombie" },
+                    { texto: "Mi poder destructivo no tiene rival en este mundo.", mob: "Wither" }
                 ]
             },
             {
-                texto: "¿Cómo ves la traición?",
+                texto: "¿Qué tipo de poder te gustaría tener?",
                 opciones: [
-                    { texto: "Como la herida más profunda, pero siempre hay posibilidad de redención.", aldea: "Konoha" },
-                    { texto: "Como algo que debe castigarse con dureza para mantener el orden.", aldea: "Suna" },
-                    { texto: "Como una debilidad que no me permitiría perdonar.", aldea: "Kiri" },
-                    { texto: "Como algo que no toleraría bajo ninguna circunstancia.", aldea: "Iwa" }
+                    { texto: "La capacidad de hacer explotar cualquier cosa a mi alrededor.", mob: "Creeper" },
+                    { texto: "Teleportarme a cualquier lugar en un instante.", mob: "Enderman" },
+                    { texto: "Ser prácticamente indestructible y seguir avanzando siempre.", mob: "Zombie" },
+                    { texto: "Invocar proyectiles de calavera que destruyan todo.", mob: "Esqueleto-Wither" }
                 ]
             },
             {
-                texto: "¿Qué ambiente de entrenamiento prefieres?",
+                texto: "¿Cómo describes tu relación con la oscuridad?",
                 opciones: [
-                    { texto: "Bosques y espacios abiertos donde el equipo se forja junto.", aldea: "Konoha" },
-                    { texto: "El desierto, donde el calor y la soledad forjan la mente.", aldea: "Suna" },
-                    { texto: "La niebla y la oscuridad, donde los sentidos se agudizan.", aldea: "Kiri" },
-                    { texto: "Las alturas y las tormentas, donde el cuerpo se lleva al límite.", aldea: "Kumo" }
+                    { texto: "Es mi aliada, en la oscuridad nadie me ve hasta que es tarde.", mob: "Creeper" },
+                    { texto: "Soy un ser de las sombras, la luz me resulta incómoda.", mob: "Enderman" },
+                    { texto: "Me siento más fuerte cuando no hay luz solar.", mob: "Zombie" },
+                    { texto: "La oscuridad es mi hogar natural, soy un ser del inframundo.", mob: "Esqueleto-Wither" }
                 ]
             },
             {
-                texto: "¿Cuál es tu relación con las emociones?",
+                texto: "¿Qué te describe mejor como ser social?",
                 opciones: [
-                    { texto: "Las abrazo, me hacen más fuerte y me conectan con los demás.", aldea: "Konoha" },
-                    { texto: "Las controlo, no puedo dejar que interfieran en mis decisiones.", aldea: "Suna" },
-                    { texto: "Las oculto, mostrarlas sería una señal de debilidad.", aldea: "Kiri" },
-                    { texto: "Las transformo en combustible para superarme.", aldea: "Kumo" }
+                    { texto: "Soy impredecible, nadie sabe cómo voy a reaccionar.", mob: "Creeper" },
+                    { texto: "Soy introvertido y me molesta que invadan mi espacio.", mob: "Enderman" },
+                    { texto: "Soy pacífico mientras nadie me provoque.", mob: "Aldeano" },
+                    { texto: "Soy fiel a quienes me tratan bien y los defiendo sin dudar.", mob: "Lobo" }
                 ]
             },
             {
-                texto: "¿Qué tipo de técnicas ninja te atraen más?",
+                texto: "¿Cuál sería tu estrategia en una batalla?",
                 opciones: [
-                    { texto: "Ninjutsu variado y técnicas de fuego o múltiples elementos.", aldea: "Konoha" },
-                    { texto: "Técnicas de arena y control del entorno.", aldea: "Suna" },
-                    { texto: "Técnicas de agua y ocultamiento en la niebla.", aldea: "Kiri" },
-                    { texto: "Técnicas de rayo y velocidad extrema.", aldea: "Kumo" }
+                    { texto: "Acercarme en silencio y detonar en el momento perfecto.", mob: "Creeper" },
+                    { texto: "Teleportarme continuamente para confundir al enemigo.", mob: "Enderman" },
+                    { texto: "Avanzar en grupo sin parar hasta abrumar al rival.", mob: "Zombie" },
+                    { texto: "Usar proyectiles desde lejos para no exponerme.", mob: "Esqueleto" }
                 ]
             },
             {
-                texto: "¿Cómo defines la paz?",
+                texto: "¿Cómo te comportas cuando estás en tu zona de confort?",
                 opciones: [
-                    { texto: "La convivencia entre aldeas y el fin de los ciclos de odio.", aldea: "Konoha" },
-                    { texto: "Un equilibrio de poder donde nadie se atreva a atacar.", aldea: "Suna" },
-                    { texto: "Algo que solo existe cuando eres suficientemente poderoso para imponerla.", aldea: "Kiri" },
-                    { texto: "El resultado de demostrar que eres el más fuerte de todos.", aldea: "Kumo" }
+                    { texto: "Deambulo tranquilo hasta que algo me altera.", mob: "Creeper" },
+                    { texto: "Recojo bloques y me muevo solo sin molestar a nadie.", mob: "Enderman" },
+                    { texto: "Me dedico al comercio e intercambio con quienes me rodean.", mob: "Aldeano" },
+                    { texto: "Sigo a mi dueño a todas partes y lo protejo con mi vida.", mob: "Lobo" }
                 ]
             },
             {
-                texto: "¿Cuál es tu actitud ante los secretos?",
+                texto: "¿Qué te hace único respecto a los demás?",
                 opciones: [
-                    { texto: "Prefiero la transparencia aunque a veces los secretos protejan.", aldea: "Konoha" },
-                    { texto: "Son herramientas necesarias para sobrevivir en el mundo ninja.", aldea: "Suna" },
-                    { texto: "Son mi especialidad, la información es poder.", aldea: "Kiri" },
-                    { texto: "Los guardo cuando es necesario pero actúo con contundencia.", aldea: "Kumo" }
+                    { texto: "Nadie más puede autodestruirse con tanto impacto.", mob: "Creeper" },
+                    { texto: "Soy el único que puede mover bloques y teletransportarse.", mob: "Enderman" },
+                    { texto: "Mi poder lo destruye absolutamente todo sin distinción.", mob: "Wither" },
+                    { texto: "Soy el más resistente del inframundo y el más letal.", mob: "Esqueleto-Wither" }
                 ]
             },
             {
-                texto: "¿Qué te motiva a seguir entrenando?",
+                texto: "¿Cuál es tu filosofía de vida?",
                 opciones: [
-                    { texto: "Proteger a los que amo y cumplir mis promesas.", aldea: "Konoha" },
-                    { texto: "Superar mis límites en las condiciones más extremas.", aldea: "Suna" },
-                    { texto: "Convertirme en alguien que nadie pueda detener.", aldea: "Kiri" },
-                    { texto: "Ser el más poderoso y veloz de mi generación.", aldea: "Kumo" }
-                ]
-            },
-            {
-                texto: "¿Cuál es tu relación con la tradición?",
-                opciones: [
-                    { texto: "La respeto y la honro aunque busco evolucionar.", aldea: "Konoha" },
-                    { texto: "Es la base de mi identidad y no la cuestionaría.", aldea: "Iwa" },
-                    { texto: "La uso cuando me conviene pero no me ata a ella.", aldea: "Kiri" },
-                    { texto: "La rompo cuando es necesario para avanzar.", aldea: "Kumo" }
-                ]
-            },
-            {
-                texto: "¿Qué harías con un poder absoluto?",
-                opciones: [
-                    { texto: "Crear un mundo donde nadie tenga que sufrir más.", aldea: "Konoha" },
-                    { texto: "Asegurar la supervivencia y prosperidad de mi pueblo.", aldea: "Suna" },
-                    { texto: "Dominar para que nadie vuelva a amenazarme jamás.", aldea: "Kiri" },
-                    { texto: "Demostrar que ningún otro poder puede igualarme.", aldea: "Oto" }
+                    { texto: "Vive el momento aunque ese momento sea una explosión.", mob: "Creeper" },
+                    { texto: "El poder absoluto es la única forma de existir.", mob: "Wither" },
+                    { texto: "La comunidad y el intercambio son la base de todo.", mob: "Aldeano" },
+                    { texto: "La lealtad y el amor incondicional son lo más valioso.", mob: "Lobo" }
                 ]
             }
         ];
 
         const resultados = {
-            Konoha: {
-                nombre: "Konoha",
-                descripcion: "Perteneces a la Aldea Oculta de la Hoja. Eres leal, compasivo y pones a tu equipo por encima de todo. Crees en la convivencia y en que los lazos entre personas son la verdadera fuente de poder. El Will of Fire arde en tu interior.",
-                imagen: "img/konoha.webp",
-                color: "#2E7D32"
+            Creeper: {
+                nombre: "Creeper",
+                descripcion: "Eres impredecible, silencioso y con una energía explosiva que sorprende a todos. Puedes parecer tranquilo pero cuando algo te altera, el resultado es devastador. Nadie te ve venir hasta que ya es demasiado tarde.",
+                imagen: "img/creeper.webp",
+                color: "#2D5A1B"
             },
-            Suna: {
-                nombre: "Sunagakure",
-                descripcion: "Perteneces a la Aldea Oculta de la Arena. Eres resistente, frío bajo presión y capaz de sobrevivir en las condiciones más extremas. Tu fortaleza viene de adaptarte a lo hostil y de controlar el entorno a tu favor.",
-                imagen: "img/suna.webp",
-                color: "#E65100"
+            Enderman: {
+                nombre: "Enderman",
+                descripcion: "Eres misterioso, solitario y con una sensibilidad especial a que invadan tu espacio. Te mueves de forma impredecible y ves el mundo desde una perspectiva que pocos comprenden. El End es tu hogar y la soledad tu aliada.",
+                imagen: "img/enderman.webp",
+                color: "#1A1A2E"
             },
-            Kiri: {
-                nombre: "Kirigakure",
-                descripcion: "Perteneces a la Aldea Oculta de la Niebla. Eres misterioso, calculador y no muestras tus cartas hasta el momento exacto. Operas desde las sombras y tu poder radica en que nadie sabe jamás qué piensas realmente.",
-                imagen: "img/kiri.webp",
-                color: "#1565C0"
+            Zombie: {
+                nombre: "Zombie",
+                descripcion: "Eres persistente, directo y absolutamente imparable una vez que tienes un objetivo. No te detienes ante nada y tu resistencia es tu mayor virtud. Puede que no seas el más rápido pero siempre llegas a donde te propones.",
+                imagen: "img/zombie.webp",
+                color: "#4A4A4A"
             },
-            Kumo: {
-                nombre: "Kumogakure",
-                descripcion: "Perteneces a la Aldea Oculta de las Nubes. Eres directo, poderoso y competitivo. Te lanzas de frente a los desafíos con velocidad y fuerza sin igual. Para ti el poder se demuestra con hechos, no con palabras.",
-                imagen: "img/kumo.webp",
-                color: "#4527A0"
+            Esqueleto: {
+                nombre: "Esqueleto",
+                descripcion: "Eres preciso, calculador y prefieres actuar desde la distancia. No te expones innecesariamente y esperas el momento exacto para actuar. Tu puntería y tu paciencia son tus mejores armas.",
+                imagen: "img/esqueleto.webp",
+                color: "#BDBDBD"
             },
-            Iwa: {
-                nombre: "Iwagakure",
-                descripcion: "Perteneces a la Aldea Oculta de la Roca. Eres sólido, inamovible y profundamente leal a tu tierra y tus tradiciones. No te doblas ante nadie y tu fortaleza viene de una convicción que nada puede erosionar.",
-                imagen: "img/iwa.webp",
-                color: "#4E342E"
+            "Esqueleto-Wither": {
+                nombre: "Esqueleto Wither",
+                descripcion: "Eres poderoso, oscuro y perteneces a otro nivel respecto al resto. Habitas en el inframundo y tu sola presencia infunde respeto. Eres más letal que un esqueleto normal y mucho más difícil de detener.",
+                imagen: "img/esqueleto-wither.webp",
+                color: "#2C2C2C"
             },
-            Oto: {
-                nombre: "Otogakure",
-                descripcion: "Perteneces a la Aldea Oculta del Sonido. Eres ambicioso, iconoclasta y no te rigen las reglas de los demás. Buscas el poder por encima de todo y no temes cruzar las líneas que otros no se atreven a traspasar.",
-                imagen: "img/oto.webp",
-                color: "#212121"
+            Aldeano: {
+                nombre: "Aldeano",
+                descripcion: "Eres sociable, pacífico y encuentras valor en el intercambio y la comunidad. No eres el más fuerte pero tu inteligencia social y tu capacidad de negociación te hacen indispensable para quienes te rodean.",
+                imagen: "img/aldeano.png",
+                color: "#8B6914"
+            },
+            Lobo: {
+                nombre: "Lobo",
+                descripcion: "Eres leal, protector y te entregas completamente a quien te da su confianza. Puedes ser independiente y salvaje pero una vez que alguien se gana tu lealtad, los defenderías con todo lo que tienes sin pedir nada a cambio.",
+                imagen: "img/lobo.png",
+                color: "#6D4C41"
+            },
+            Wither: {
+                nombre: "Wither",
+                descripcion: "Eres poder absoluto, destrucción sin límites y una presencia que aterra a todos. No perteneces al mundo normal — eres una fuerza de la naturaleza que arrasa con todo lo que encuentra. Pocos se atreven a enfrentarte.",
+                imagen: "img/wither.png",
+                color: "#1A1A1A"
             }
         };
 
         let preguntaActual = 0;
-        let puntuaciones = { Konoha:0, Suna:0, Kiri:0, Kumo:0, Iwa:0, Oto:0 };
+        let puntuaciones = { Creeper:0, Enderman:0, Zombie:0, Esqueleto:0, "Esqueleto-Wither":0, Aldeano:0, Lobo:0, Wither:0 };
         let seleccionActual = null;
 
         function renderPregunta() {
@@ -449,16 +409,16 @@
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option';
                 btn.innerHTML = `<div class="quiz-option-letter">${letras[i]}</div><div class="quiz-option-text">${op.texto}</div>`;
-                btn.onclick = () => seleccionar(btn, op.aldea);
+                btn.onclick = () => seleccionar(btn, op.mob);
                 wrap.appendChild(btn);
             });
             seleccionActual = null;
         }
 
-        function seleccionar(btn, aldea) {
+        function seleccionar(btn, mob) {
             document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-            seleccionActual = aldea;
+            seleccionActual = mob;
             const nextBtn = document.getElementById('nextBtn');
             nextBtn.classList.add('visible');
             const esUltima = preguntaActual === preguntas.length - 1;
@@ -481,8 +441,9 @@
             const res = resultados[ganador];
             document.getElementById('resultName').textContent = res.nombre;
             document.getElementById('resultDesc').textContent = res.descripcion;
-            document.getElementById('resultBgColor').style.backgroundImage = `url('${res.imagen}')`;
-            document.getElementById('resultBgColor').style.backgroundColor = res.color;
+            document.getElementById('resultImg').src = res.imagen;
+            document.getElementById('resultImg').alt = res.nombre;
+            document.getElementById('resultBgColor').style.background = res.color;
             document.getElementById('preguntaWrap').style.display = 'none';
             document.getElementById('exitBtn').style.display = 'none';
             document.querySelector('.quiz-chars-btn').style.display = 'none';
@@ -493,7 +454,7 @@
 
         function restartQuiz() {
             preguntaActual = 0;
-            puntuaciones = { Konoha:0, Suna:0, Kiri:0, Kumo:0, Iwa:0, Oto:0 };
+            puntuaciones = { Creeper:0, Enderman:0, Zombie:0, Esqueleto:0, "Esqueleto-Wither":0, Aldeano:0, Lobo:0, Wither:0 };
             seleccionActual = null;
             document.getElementById('preguntaWrap').style.display = 'block';
             document.getElementById('exitBtn').style.display = 'flex';
