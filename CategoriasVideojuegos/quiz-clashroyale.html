@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué carta eres de Clash Royale? - QuizApp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: #F7F5F0; min-height: 100vh; }
+
+        .qa-header {
+            background: #0D0D0D;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 48px;
+            gap: 24px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .qa-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px; color: #fff; letter-spacing: -0.5px; flex-shrink: 0; cursor: pointer; }
+        .qa-logo span { color: #F97316; }
+        .qa-search { flex: 1; max-width: 420px; position: relative; }
+        .qa-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #888; font-size: 15px; pointer-events: none; }
+        .qa-search input { width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px 16px 10px 40px; color: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: all 0.2s; }
+        .qa-search input::placeholder { color: #666; }
+        .qa-search input:focus { background: rgba(255,255,255,0.12); border-color: rgba(249,115,22,0.5); box-shadow: 0 0 0 3px rgba(249,115,22,0.1); }
+        .qa-nav { display: flex; gap: 8px; flex-shrink: 0; }
+        .qa-nav a { color: #aaa; text-decoration: none; font-size: 14px; font-weight: 500; padding: 8px 16px; border-radius: 99px; transition: all 0.2s; }
+        .qa-nav a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+        .qa-nav a.active { color: #0D0D0D; background: #fff; }
+
+        .quiz-wrap { max-width: 720px; margin: 0 auto; padding: 48px 24px 80px; }
+
+        .quiz-progress-wrap { margin-bottom: 36px; }
+        .quiz-progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .quiz-progress-label { font-size: 13px; color: #888; font-weight: 500; }
+        .quiz-progress-num { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: #0D0D0D; }
+        .quiz-progress-bar { width: 100%; height: 6px; background: #E5E2DC; border-radius: 99px; overflow: hidden; }
+        .quiz-progress-fill { height: 100%; background: #F97316; border-radius: 99px; transition: width 0.4s ease; }
+
+        .quiz-action-row { display: flex; gap: 12px; margin-bottom: 36px; }
+        .quiz-exit-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        .quiz-exit-btn:hover { border-color: #E24B4A; color: #E24B4A; background: #FFF0F0; }
+        .quiz-chars-btn { display: flex; align-items: center; justify-content: center; gap: 8px; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 99px; padding: 10px 22px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: #888; cursor: pointer; transition: all 0.2s; }
+        .quiz-chars-btn:hover { border-color: #F97316; color: #F97316; background: #FFF7F3; }
+
+        .quiz-question { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; line-height: 1.2; margin-bottom: 32px; }
+
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+        .quiz-option { width: 100%; background: #fff; border: 1.5px solid #EDEAE4; border-radius: 14px; padding: 18px 24px; display: flex; align-items: center; gap: 16px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: 'DM Sans', sans-serif; }
+        .quiz-option:hover { border-color: #F97316; transform: translateX(4px); }
+        .quiz-option.selected { border-color: #F97316; background: #FFF7F3; transform: translateX(4px); }
+        .quiz-option-letter { width: 32px; height: 32px; border-radius: 8px; background: #F7F5F0; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #888; flex-shrink: 0; transition: all 0.2s; }
+        .quiz-option.selected .quiz-option-letter { background: #F97316; color: #fff; }
+        .quiz-option-text { font-size: 15px; color: #0D0D0D; line-height: 1.4; }
+
+        .quiz-next { margin-top: 28px; width: 100%; background: #0D0D0D; color: #fff; border: none; border-radius: 14px; padding: 16px; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: none; }
+        .quiz-next:hover { background: #F97316; }
+        .quiz-next.visible { display: block; }
+
+        .exit-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 100; display: none; align-items: center; justify-content: center; }
+        .exit-modal-overlay.visible { display: flex; }
+        .exit-modal { background: #fff; border-radius: 24px; padding: 40px 36px; max-width: 420px; width: 90%; text-align: center; }
+        .exit-modal-icon { width: 56px; height: 56px; background: #FFF0F0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin: 0 auto 20px; }
+        .exit-modal h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; color: #0D0D0D; letter-spacing: -0.5px; margin-bottom: 10px; }
+        .exit-modal p { font-size: 15px; color: #888; line-height: 1.6; margin-bottom: 28px; }
+        .exit-modal-btns { display: flex; gap: 10px; }
+        .exit-modal-stay { flex: 1; background: #F7F5F0; color: #0D0D0D; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .exit-modal-stay:hover { background: #EDEAE4; }
+        .exit-modal-leave { flex: 1; background: #E24B4A; color: #fff; border: none; border-radius: 12px; padding: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .exit-modal-leave:hover { background: #C0392B; }
+
+        .chars-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+        .chars-modal-overlay.visible { display: flex; }
+        .chars-modal { background: #0D0D0D; border-radius: 24px; padding: 40px; max-width: 860px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        .chars-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
+        .chars-modal-title { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+        .chars-modal-title span { color: #F97316; }
+        .chars-modal-close { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+        .chars-modal-close:hover { background: rgba(255,255,255,0.2); }
+        .chars-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .char-card { border-radius: 16px; overflow: hidden; position: relative; aspect-ratio: 3/4; display: flex; align-items: flex-end; }
+        .char-card-bg { position: absolute; inset: 0; z-index: 0; }
+        .char-card-img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+        .char-card-overlay { position: absolute; inset: 0; z-index: 2; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%); }
+        .char-card-name { position: relative; z-index: 3; padding: 12px; font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700; color: #fff; line-height: 1.2; }
+
+        .result-card { display: none; border-radius: 24px; overflow: hidden; position: relative; min-height: 420px; }
+        .result-card.visible { display: flex; }
+        .result-card-bg-color { position: absolute; inset: 0; z-index: 0; }
+        .result-card-left { position: relative; z-index: 1; flex: 1; padding: 40px 36px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(to right, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.75) 70%, rgba(0,0,0,0) 100%); }
+        .result-card-tag { display: inline-block; background: rgba(249,115,22,0.25); color: #F97316; font-size: 12px; font-weight: 500; padding: 4px 14px; border-radius: 99px; margin-bottom: 14px; border: 1px solid rgba(249,115,22,0.4); width: fit-content; }
+        .result-card-eres { font-size: 14px; color: rgba(255,255,255,0.55); margin-bottom: 4px; font-weight: 500; }
+        .result-card-name { font-family: 'Syne', sans-serif; font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -1.5px; line-height: 1; margin-bottom: 16px; }
+        .result-card-desc { font-size: 14px; color: rgba(255,255,255,0.72); line-height: 1.7; margin-bottom: 28px; max-width: 340px; }
+        .result-card-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .result-btn-retry { background: #F97316; color: #fff; border: none; border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-retry:hover { background: #EA6B0A; transform: translateY(-1px); }
+        .result-btn-back { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 22px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; }
+        .result-btn-back:hover { background: rgba(255,255,255,0.18); }
+        .result-card-right { position: relative; z-index: 1; width: 280px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
+        .result-card-right img { width: 100%; height: 100%; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 0 20px rgba(0,0,0,0.4)); }
+    </style>
+</head>
+<body>
+
+    <header class="qa-header" id="mainHeader">
+        <div class="qa-logo" onclick="window.location.href='../index.html'">Quiz<span>App</span></div>
+        <div class="qa-search">
+            <span class="qa-search-icon">🔍</span>
+            <input type="text" placeholder="Buscar un quiz..." autocomplete="off">
+        </div>
+        <nav class="qa-nav">
+            <a href="../index.html">Inicio</a>
+            <a href="../categorias.html">Categorías</a>
+            <a href="#">Quizzes</a>
+            <a href="#">Top</a>
+        </nav>
+    </header>
+
+    <div class="quiz-wrap" id="quizWrap">
+        <div class="quiz-progress-wrap">
+            <div class="quiz-progress-top">
+                <span class="quiz-progress-label">Clash Royale · ¿Qué carta eres?</span>
+                <span class="quiz-progress-num" id="progressNum">1 / 16</span>
+            </div>
+            <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" id="progressFill" style="width: 6.25%;"></div>
+            </div>
+        </div>
+
+        <div class="quiz-action-row">
+            <button class="quiz-chars-btn" onclick="abrirPersonajes()">🃏 Cartas disponibles</button>
+            <button class="quiz-exit-btn" id="exitBtn" onclick="abrirModal()">✕ Salir del quiz</button>
+        </div>
+
+        <div id="preguntaWrap">
+            <div class="quiz-question" id="questionText"></div>
+            <div class="quiz-options" id="optionsWrap"></div>
+            <button class="quiz-next" id="nextBtn" onclick="nextQuestion()">Siguiente pregunta →</button>
+        </div>
+
+        <div class="result-card" id="resultCard">
+            <div class="result-card-bg-color" id="resultBgColor"></div>
+            <div class="result-card-left">
+                <div class="result-card-tag">👑 Clash Royale</div>
+                <div class="result-card-eres">Eres...</div>
+                <div class="result-card-name" id="resultName"></div>
+                <div class="result-card-desc" id="resultDesc"></div>
+                <div class="result-card-btns">
+                    <button class="result-btn-retry" onclick="restartQuiz()">Repetir quiz</button>
+                    <button class="result-btn-back" onclick="window.location.href='videojuegos.html'">Volver a Videojuegos</button>
+                </div>
+            </div>
+            <div class="result-card-right">
+                <img id="resultImg" src="" alt="Carta">
+            </div>
+        </div>
+    </div>
+
+    <div class="exit-modal-overlay" id="exitModal">
+        <div class="exit-modal">
+            <div class="exit-modal-icon">⚠️</div>
+            <h2>¿Seguro que quieres salir?</h2>
+            <p>Si sales ahora perderás todo tu progreso y tus respuestas no se guardarán.</p>
+            <div class="exit-modal-btns">
+                <button class="exit-modal-stay" onclick="cerrarModal()">Quedarse</button>
+                <button class="exit-modal-leave" onclick="window.location.href='videojuegos.html'">✕ Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="chars-modal-overlay" id="charsModal">
+        <div class="chars-modal">
+            <div class="chars-modal-header">
+                <div class="chars-modal-title">Cartas <span>disponibles</span></div>
+                <button class="chars-modal-close" onclick="cerrarPersonajes()">✕</button>
+            </div>
+            <div class="chars-grid">
+                <div class="char-card"><div class="char-card-bg" style="background:#B0855A;"></div><img class="char-card-img" src="img/knight.webp" alt="Caballero"><div class="char-card-overlay"></div><div class="char-card-name">Caballero</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#7B8FA1;"></div><img class="char-card-img" src="img/giant.webp" alt="Gigante"><div class="char-card-overlay"></div><div class="char-card-name">Gigante</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#8B4513;"></div><img class="char-card-img" src="img/prince.jpg" alt="Príncipe"><div class="char-card-overlay"></div><div class="char-card-name">Príncipe</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#E0E0E0;"></div><img class="char-card-img" src="img/skeletons.png" alt="Esqueletos"><div class="char-card-overlay"></div><div class="char-card-name">Esqueletos</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#4A235A;"></div><img class="char-card-img" src="img/witch.png" alt="Hechicera"><div class="char-card-overlay"></div><div class="char-card-name">Hechicera</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#1A237E;"></div><img class="char-card-img" src="img/darkprince.webp" alt="Príncipe Oscuro"><div class="char-card-overlay"></div><div class="char-card-name">Príncipe Oscuro</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#B71C1C;"></div><img class="char-card-img" src="img/infernodragon.webp" alt="Dragón Infernal"><div class="char-card-overlay"></div><div class="char-card-name">Dragón Infernal</div></div>
+                <div class="char-card"><div class="char-card-bg" style="background:#212121;"></div><img class="char-card-img" src="img/minipekka.webp" alt="Mini Pekka"><div class="char-card-overlay"></div><div class="char-card-name">Mini Pekka</div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const preguntas = [
+            {
+                texto: "¿Cómo describirías tu estilo de combate?",
+                opciones: [
+                    { texto: "Equilibrado y fiable, siempre rindo bien en cualquier situación.", carta: "Caballero" },
+                    { texto: "Lento pero imparable, nadie puede detenerme cuando avanzo.", carta: "Gigante" },
+                    { texto: "Explosivo y veloz, cargo sin pensarlo dos veces.", carta: "Príncipe" },
+                    { texto: "Aparezco en masa y abrumo al rival con números.", carta: "Esqueletos" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor fortaleza?",
+                opciones: [
+                    { texto: "Mi versatilidad, sirvo para cualquier situación.", carta: "Caballero" },
+                    { texto: "Mi resistencia, aguanto más que nadie.", carta: "Gigante" },
+                    { texto: "Mi daño, un golpe mío hace mucho daño.", carta: "Príncipe" },
+                    { texto: "Mi coste bajo, puedo usarme constantemente.", carta: "Esqueletos" }
+                ]
+            },
+            {
+                texto: "¿Cómo reaccionas ante una amenaza directa?",
+                opciones: [
+                    { texto: "Me interpongo y absorbo el daño para proteger a los demás.", carta: "Caballero" },
+                    { texto: "Sigo avanzando sin cambiar mi objetivo, nada me distrae.", carta: "Gigante" },
+                    { texto: "Acelero y cargo directo contra la amenaza.", carta: "Príncipe" },
+                    { texto: "Envío una oleada que distrae y neutraliza al enemigo.", carta: "Esqueletos" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu personalidad?",
+                opciones: [
+                    { texto: "Sólido y confiable, siempre estoy cuando se me necesita.", carta: "Caballero" },
+                    { texto: "Poderoso y determinado, voy a por mi objetivo sin parar.", carta: "Gigante" },
+                    { texto: "Oscuro e intimidante, nadie quiere cruzarse conmigo.", carta: "Príncipe Oscuro" },
+                    { texto: "Misterioso y mágico, hago cosas que otros no pueden.", carta: "Hechicera" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu mayor debilidad?",
+                opciones: [
+                    { texto: "Soy bastante normal, no destaco especialmente en nada.", carta: "Caballero" },
+                    { texto: "Soy lento y las tropas de aire me ignoran completamente.", carta: "Gigante" },
+                    { texto: "Si me frenan pierdo toda mi ventaja de velocidad.", carta: "Príncipe" },
+                    { texto: "Tengo poca vida y cualquier ataque en área me elimina.", carta: "Esqueletos" }
+                ]
+            },
+            {
+                texto: "¿Cómo prefieres atacar?",
+                opciones: [
+                    { texto: "De forma directa y sin complicarme, cuerpo a cuerpo.", carta: "Caballero" },
+                    { texto: "Avanzando lentamente pero de forma implacable.", carta: "Gigante" },
+                    { texto: "Lanzando ataques a distancia que queman sin parar.", carta: "Dragón Infernal" },
+                    { texto: "Con una carga brutal que dobla el daño al impactar.", carta: "Príncipe" }
+                ]
+            },
+            {
+                texto: "¿Qué valoras más en un compañero de equipo?",
+                opciones: [
+                    { texto: "La fiabilidad, que siempre esté disponible cuando se le necesita.", carta: "Caballero" },
+                    { texto: "La resistencia, que aguante y absorba el daño.", carta: "Gigante" },
+                    { texto: "El poder de área, que elimine grupos de enemigos.", carta: "Hechicera" },
+                    { texto: "La velocidad y el daño concentrado en un punto.", carta: "Mini Pekka" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu relación con el riesgo?",
+                opciones: [
+                    { texto: "Calculado, no me arriesgo más de lo necesario.", carta: "Caballero" },
+                    { texto: "Consistente, sigo mi estrategia sin importar lo que pase.", carta: "Gigante" },
+                    { texto: "Me encanta el riesgo, voy a por todas sin pensarlo.", carta: "Príncipe" },
+                    { texto: "Me muevo en las sombras y aparezco cuando menos se espera.", carta: "Príncipe Oscuro" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu filosofía de vida?",
+                opciones: [
+                    { texto: "La constancia y la fiabilidad ganan a largo plazo.", carta: "Caballero" },
+                    { texto: "La fuerza bruta siempre abre camino si la aplicas bien.", carta: "Gigante" },
+                    { texto: "El caos bien dirigido puede ser más efectivo que cualquier plan.", carta: "Esqueletos" },
+                    { texto: "El conocimiento y la magia son más poderosos que la fuerza.", carta: "Hechicera" }
+                ]
+            },
+            {
+                texto: "¿Cómo te comportas bajo presión?",
+                opciones: [
+                    { texto: "Me mantengo firme y hago mi trabajo sin perder la cabeza.", carta: "Caballero" },
+                    { texto: "Sigo avanzando, la presión no cambia mi objetivo.", carta: "Gigante" },
+                    { texto: "Me activo y me vuelvo más letal cuanto más aprietan.", carta: "Dragón Infernal" },
+                    { texto: "Exploto y libero toda mi energía de golpe.", carta: "Príncipe" }
+                ]
+            },
+            {
+                texto: "¿Qué tipo de poder te gustaría tener?",
+                opciones: [
+                    { texto: "Ser invulnerable y absorber cualquier golpe sin retroceder.", carta: "Gigante" },
+                    { texto: "Invocar esqueletos y controlar un ejército de no-muertos.", carta: "Hechicera" },
+                    { texto: "Lanzar rayos de fuego que aumentan de intensidad con el tiempo.", carta: "Dragón Infernal" },
+                    { texto: "Una espada que parte en dos cualquier cosa de un solo golpe.", carta: "Mini Pekka" }
+                ]
+            },
+            {
+                texto: "¿Cómo describes tu rol en un equipo?",
+                opciones: [
+                    { texto: "El todoterreno que cubre todas las posiciones.", carta: "Caballero" },
+                    { texto: "El tanque que abre camino para los demás.", carta: "Gigante" },
+                    { texto: "El apoyo que controla el campo de batalla desde lejos.", carta: "Hechicera" },
+                    { texto: "El ejecutor que elimina objetivos de alto valor.", carta: "Mini Pekka" }
+                ]
+            },
+            {
+                texto: "¿Cómo reaccionas cuando te superan en número?",
+                opciones: [
+                    { texto: "Me defiendo lo mejor que puedo y aguanto el máximo tiempo.", carta: "Caballero" },
+                    { texto: "Sigo a por mi objetivo, los números no me detienen.", carta: "Gigante" },
+                    { texto: "Uso mi ataque en área para limpiar a todos de golpe.", carta: "Príncipe Oscuro" },
+                    { texto: "Invoco más refuerzos para equilibrar la situación.", carta: "Hechicera" }
+                ]
+            },
+            {
+                texto: "¿Qué te hace único respecto a los demás?",
+                opciones: [
+                    { texto: "Mi equilibrio perfecto entre coste, vida y daño.", carta: "Caballero" },
+                    { texto: "Soy el objetivo principal que el rival siempre intenta parar.", carta: "Gigante" },
+                    { texto: "Mi ataque se vuelve más poderoso cuanto más tiempo se mantiene.", carta: "Dragón Infernal" },
+                    { texto: "Soy el más letal por elixir de todo el juego.", carta: "Mini Pekka" }
+                ]
+            },
+            {
+                texto: "¿Cuál es tu estrategia favorita?",
+                opciones: [
+                    { texto: "Defensa sólida primero y contrataque cuando el rival está bajo de elixir.", carta: "Caballero" },
+                    { texto: "Push lento e imparable apoyado por tropas detrás.", carta: "Gigante" },
+                    { texto: "Ciclo rápido y presión constante para no dar respiro al rival.", carta: "Esqueletos" },
+                    { texto: "Apoyo aéreo que neutraliza cualquier defensa terrestre.", carta: "Dragón Infernal" }
+                ]
+            },
+            {
+                texto: "¿Cómo defines la victoria?",
+                opciones: [
+                    { texto: "Superar al rival con consistencia y decisiones sólidas.", carta: "Caballero" },
+                    { texto: "Destruir la torre con una embestida imparable.", carta: "Gigante" },
+                    { texto: "Eliminar todo lo que se interponga en mi camino sin piedad.", carta: "Mini Pekka" },
+                    { texto: "Controlar el campo de batalla y desgastar al rival hasta el final.", carta: "Hechicera" }
+                ]
+            }
+        ];
+
+        const resultados = {
+            Caballero: {
+                nombre: "Caballero",
+                descripcion: "Eres fiable, equilibrado y siempre estás cuando se te necesita. No eres el más espectacular pero tu consistencia te hace indispensable. Eres el tipo de persona en quien todos confían porque nunca fallas cuando más importa.",
+                imagen: "img/knight.webp",
+                color: "#B0855A"
+            },
+            Gigante: {
+                nombre: "Gigante",
+                descripcion: "Eres imparable, resistente y tienes una determinación que nada puede frenar. Avanzas lentamente pero con una convicción absoluta hacia tu objetivo. Tu presencia en el campo cambia el curso de cualquier batalla.",
+                imagen: "img/giant.webp",
+                color: "#7B8FA1"
+            },
+            Príncipe: {
+                nombre: "Príncipe",
+                descripcion: "Eres explosivo, veloz y devastador cuando coges carrerilla. Nadie quiere estar en tu camino cuando aceleras. Vives para el momento de la carga perfecta y cuando conectas, el resultado es espectacular.",
+                imagen: "img/prince.jpg",
+                color: "#8B4513"
+            },
+            Esqueletos: {
+                nombre: "Esqueletos",
+                descripcion: "Eres eficiente, ingenioso y consigues mucho con muy poco. No necesitas grandes recursos para ser efectivo — tu valor está en aparecer en el momento exacto y hacer exactamente lo que se necesita sin desperdiciar nada.",
+                imagen: "img/skeletons.png",
+                color: "#9E9E9E"
+            },
+            Hechicera: {
+                nombre: "Hechicera",
+                descripcion: "Eres misterioso, poderoso y capaz de controlar el campo de batalla como nadie. Tu conocimiento y tu magia te dan una ventaja que la fuerza bruta no puede igualar. Ves el juego desde una perspectiva que pocos comprenden.",
+                imagen: "img/witch.png",
+                color: "#4A235A"
+            },
+            "Príncipe Oscuro": {
+                nombre: "Príncipe Oscuro",
+                descripcion: "Eres oscuro, intimidante y con un ataque en área que nadie espera. Puedes parecer similar a otros pero tienes algo que te hace diferente y más peligroso. Los que te subestiman acaban pagándolo caro.",
+                imagen: "img/darkprince.webp",
+                color: "#1A237E"
+            },
+            "Dragón Infernal": {
+                nombre: "Dragón Infernal",
+                descripcion: "Eres persistente, aéreo e implacable. Tu poder crece cuanto más tiempo te dejan actuar libremente. Eres difícil de parar y si el rival no te neutraliza rápido el daño que produces es devastador.",
+                imagen: "img/infernodragon.webp",
+                color: "#B71C1C"
+            },
+            "Mini Pekka": {
+                nombre: "Mini Pekka",
+                descripcion: "Eres letal, preciso y el más temido cuando apareces en el momento exacto. Cada golpe tuyo es un mensaje claro. No necesitas mucho espacio ni mucho tiempo — con un par de ataques dejas tu huella de forma indeleble.",
+                imagen: "img/minipekka.webp",
+                color: "#212121"
+            }
+        };
+
+        let preguntaActual = 0;
+        let puntuaciones = { Caballero:0, Gigante:0, Príncipe:0, Esqueletos:0, Hechicera:0, "Príncipe Oscuro":0, "Dragón Infernal":0, "Mini Pekka":0 };
+        let seleccionActual = null;
+
+        function renderPregunta() {
+            const p = preguntas[preguntaActual];
+            document.getElementById('questionText').textContent = p.texto;
+            document.getElementById('progressNum').textContent = (preguntaActual + 1) + ' / ' + preguntas.length;
+            document.getElementById('progressFill').style.width = ((preguntaActual + 1) / preguntas.length * 100) + '%';
+            const letras = ['A', 'B', 'C', 'D'];
+            const wrap = document.getElementById('optionsWrap');
+            wrap.innerHTML = '';
+            p.opciones.forEach((op, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option';
+                btn.innerHTML = `<div class="quiz-option-letter">${letras[i]}</div><div class="quiz-option-text">${op.texto}</div>`;
+                btn.onclick = () => seleccionar(btn, op.carta);
+                wrap.appendChild(btn);
+            });
+            seleccionActual = null;
+        }
+
+        function seleccionar(btn, carta) {
+            document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            seleccionActual = carta;
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.classList.add('visible');
+            const esUltima = preguntaActual === preguntas.length - 1;
+            nextBtn.textContent = esUltima ? 'Ver mi resultado →' : 'Siguiente pregunta →';
+        }
+
+        function nextQuestion() {
+            if (!seleccionActual) return;
+            puntuaciones[seleccionActual]++;
+            preguntaActual++;
+            if (preguntaActual >= preguntas.length) {
+                mostrarResultado();
+            } else {
+                renderPregunta();
+            }
+        }
+
+        function mostrarResultado() {
+            const ganador = Object.keys(puntuaciones).reduce((a, b) => puntuaciones[a] > puntuaciones[b] ? a : b);
+            const res = resultados[ganador];
+            document.getElementById('resultName').textContent = res.nombre;
+            document.getElementById('resultDesc').textContent = res.descripcion;
+            document.getElementById('resultImg').src = res.imagen;
+            document.getElementById('resultImg').alt = res.nombre;
+            document.getElementById('resultBgColor').style.background = res.color;
+            document.getElementById('preguntaWrap').style.display = 'none';
+            document.getElementById('exitBtn').style.display = 'none';
+            document.querySelector('.quiz-chars-btn').style.display = 'none';
+            document.getElementById('progressNum').textContent = '✓ Completado';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('resultCard').classList.add('visible');
+        }
+
+        function restartQuiz() {
+            preguntaActual = 0;
+            puntuaciones = { Caballero:0, Gigante:0, Príncipe:0, Esqueletos:0, Hechicera:0, "Príncipe Oscuro":0, "Dragón Infernal":0, "Mini Pekka":0 };
+            seleccionActual = null;
+            document.getElementById('preguntaWrap').style.display = 'block';
+            document.getElementById('exitBtn').style.display = 'flex';
+            document.querySelector('.quiz-chars-btn').style.display = 'flex';
+            document.getElementById('resultCard').classList.remove('visible');
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.style.display = '';
+            nextBtn.classList.remove('visible');
+            renderPregunta();
+        }
+
+        function abrirModal() { document.getElementById('exitModal').classList.add('visible'); }
+        function cerrarModal() { document.getElementById('exitModal').classList.remove('visible'); }
+        function abrirPersonajes() { document.getElementById('charsModal').classList.add('visible'); }
+        function cerrarPersonajes() { document.getElementById('charsModal').classList.remove('visible'); }
+
+        document.getElementById('exitModal').addEventListener('click', function(e) { if (e.target === this) cerrarModal(); });
+        document.getElementById('charsModal').addEventListener('click', function(e) { if (e.target === this) cerrarPersonajes(); });
+
+        renderPregunta();
+    </script>
+
+</body>
+</html>
